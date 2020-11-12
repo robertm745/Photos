@@ -22,6 +22,7 @@ public class NonAdminController {
     
     public void start(Stage newStage, Stage oldStage, User user) {
     	promptText.setText("Welcome, " + user + "!");
+    	
     	logoutButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
