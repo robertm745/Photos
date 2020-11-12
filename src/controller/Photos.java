@@ -9,7 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
-import view.LoginController;
+import view.*;
+import model.*;
 
 public class Photos extends Application {
 	
@@ -27,10 +28,32 @@ public class Photos extends Application {
 		primaryStage.show();
 		
 	}
+	
+	public static void reset() {
+		UserList list = new UserList();
+		list.addUser(new User("user1"));
+		list.addUser(new User("user3"));
+		list.addUser(new User("user2"));
+		//list.printUsers();
+		UserList listB;
+		try {
+			list.writeList();
+			listB = UserList.readList();
+			listB.printUsers();
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
+		//reset();
+		
 		launch(args);
+
+		
 		
 	}
 }

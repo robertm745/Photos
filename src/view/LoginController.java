@@ -1,7 +1,9 @@
 package view;
 
 import java.io.IOException;
-
+import java.util.*;
+import model.*;
+import view.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,11 +15,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.UserList;
 
 public class LoginController {
 	
 	@FXML private Button login;
 	@FXML private TextField username;
+	@FXML private Text statusText;
 
 	public void start(Stage primaryStage) throws Exception {
 		login.setOnAction(new EventHandler<ActionEvent>() {
@@ -44,6 +48,32 @@ public class LoginController {
 					stage.setResizable(false);
 					stage.show();
 					primaryStage.hide();
+					statusText.setVisible(false);
+				} else {
+					try {
+						UserList list = UserList.readList();
+						User user = new User(username.getText());
+						if (!list.contains(user)) {
+							statusText.setVisible(true);
+						} else {
+							
+							FXMLLoader loader = new FXMLLoader();
+							loader.setLocation(getClass().getResource("/view/non_admin.fxml"));
+							Parent root = null;
+							root = (Pane) loader.load();
+							NonAdminController nonAdmin = loader.getController();
+							Stage stage = new Stage();
+							nonAdmin.start(stage,  primaryStage, user);
+							stage.setScene(new Scene(root, 634, 475));
+							stage.setResizable(false);
+							stage.show();
+							primaryStage.hide();
+							statusText.setVisible(false);
+						}
+						
+					} catch (ClassNotFoundException | IOException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

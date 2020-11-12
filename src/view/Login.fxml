@@ -13,11 +13,12 @@
             <Font size="18.0" />
          </font>
       </Text>
-      <TextField fx:id="username" layoutX="225.0" layoutY="175.0" promptText="Enter Username">
+      <TextField fx:id="username" layoutX="209.0" layoutY="179.0" promptText="Enter Username">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
       <Button fx:id="login" layoutX="274.0" layoutY="249.0" mnemonicParsing="false" text="Login" />
+      <Text fx:id="statusText" layoutX="242.0" layoutY="363.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error: User Not Found" visible="false" />
    </children>
 </Pane>
