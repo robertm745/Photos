@@ -1,6 +1,8 @@
 package view;
 
 import java.io.IOException;
+
+import controller.Photos;
 import model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +31,8 @@ public class AdminController {
     private ObservableList<User> obsList;
     private UserList list;
 
-    public void start(Stage newStage, Stage oldStage) throws Exception {
+    public void start(Stage newStage) throws Exception {
+		newStage.setTitle("Admin");
     	list = UserList.readList();
     	obsList = FXCollections.observableArrayList(list.getList());
 		obsList.sort((a,b) -> a.compareTo(b));
@@ -41,7 +44,11 @@ public class AdminController {
     		@Override
     		public void handle(ActionEvent e) {
     			newStage.close();
-    			oldStage.show();
+    			try {
+					new Photos().start(new Stage());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
     		}
     	});
     	deleteUserButton.setOnAction(new EventHandler<ActionEvent>() {

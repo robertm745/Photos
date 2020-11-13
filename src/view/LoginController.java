@@ -23,11 +23,10 @@ public class LoginController {
 	@FXML private TextField username;
 	@FXML private Text statusText;
 	
-	private UserList uList;
 
 	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle("Photos Library");
 		username.clear();
-		uList = UserList.readList();
 		login.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				if (username.getText().equalsIgnoreCase("admin")) {
@@ -36,42 +35,38 @@ public class LoginController {
 					Parent root = null;
 					try {
 						root = (Pane) loader.load();
-					} catch (IOException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					AdminController adminController = loader.getController();
-					Stage stage = new Stage();
-					try {
-						adminController.start(stage, primaryStage);
+						AdminController adminController = loader.getController();
+						Stage stage = new Stage();
+						adminController.start(stage);					
+						stage.setScene(new Scene(root, 600, 418));
+						stage.setResizable(false);
+						stage.show();
+						primaryStage.hide();
+						statusText.setVisible(false);
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					stage.setScene(new Scene(root, 600, 418));
-					stage.setResizable(false);
-					stage.show();
-					primaryStage.hide();
-					statusText.setVisible(false);
 				} else {
 					try {
-						UserList list = UserList.readList();
 						User user = new User(username.getText());
-						if (!list.contains(user)) {
+						if (username.getText().isBlank()) {
+							statusText.setText("Please enter username");
 							statusText.setVisible(true);
-						} else {
-							
+						} else if (!UserList.readList().contains(user)) {
+							statusText.setText("Error: User not found");
+							statusText.setVisible(true);
+						} else {						
 							FXMLLoader loader = new FXMLLoader();
 							loader.setLocation(getClass().getResource("/view/non_admin.fxml"));
 							Parent root = null;
 							root = (Pane) loader.load();
 							NonAdminController nonAdmin = loader.getController();
 							Stage stage = new Stage();
-							nonAdmin.start(stage,  primaryStage, user);
+							nonAdmin.start(stage, user);
 							stage.setScene(new Scene(root, 634, 475));
 							stage.setResizable(false);
 							stage.show();
-							primaryStage.hide();
+							primaryStage.close();
 							statusText.setVisible(false);
 						}
 						

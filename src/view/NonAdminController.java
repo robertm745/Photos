@@ -3,14 +3,19 @@ package view;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import controller.Photos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.*;
@@ -33,18 +38,19 @@ public class NonAdminController {
     private AlbumList albums;
     private int userIndex;
     private ObservableList<Album> obsList;
-    private UserList uList;
+    private UserList userList;
     private boolean rename;
     
-    public void start(Stage newStage, Stage oldStage, User user) {
+    public void start(Stage newStage, User user) {
     	try {
-			this.uList = UserList.readList();
+			this.userList = UserList.readList();
 		} catch (ClassNotFoundException | IOException e2) {
 			e2.printStackTrace();
 		}
+		newStage.setTitle(user + "'s Albums");
     	promptText.setText("Welcome, " + user + "!");
-    	userIndex = uList.getUserIndex(user);
-    	albums = uList.getList().get(uList.getUserIndex(user)).getAlbumList();
+    	userIndex = userList.getUserIndex(user);
+    	albums = userList.getList().get(userList.getUserIndex(user)).getAlbumList();
     	obsList = FXCollections.observableArrayList(albums.getList());
     	obsList.sort((a,b) -> a.compareTo(b));
     	listView.setItems(obsList);
@@ -55,7 +61,11 @@ public class NonAdminController {
     		@Override
     		public void handle(ActionEvent e) {
     			newStage.close();
-    			oldStage.show();
+    			try {
+					new Photos().start(new Stage());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
     		}
     	});
     	
@@ -64,7 +74,7 @@ public class NonAdminController {
     		public void handle(ActionEvent e) {
     			if (!listView.getSelectionModel().isEmpty()) {
     				int sel = listView.getSelectionModel().getSelectedIndex();
-    				uList.getList().get(userIndex).getAlbumList().deleteAlbum(listView.getSelectionModel().getSelectedItem());
+    				userList.getList().get(userIndex).getAlbumList().deleteAlbum(listView.getSelectionModel().getSelectedItem());
     				update();
     				if (sel == albums.getList().size()) 
     					sel--;
@@ -102,6 +112,7 @@ public class NonAdminController {
     			openAlbum.setVisible(true);
     			search.setVisible(true);
     			listView.setDisable(false);
+    			listView.requestFocus();
     		}
     	});
     	
@@ -109,19 +120,26 @@ public class NonAdminController {
     		@Override
     		public void handle(ActionEvent e) {
     			if (rename) {
-    				int index = uList.getList().get(userIndex).getAlbumList().getAlbumIndex(listView.getSelectionModel().getSelectedItem());
-					uList.getList().get(userIndex).getAlbumList().getAlbum(index).rename(albumTextField.getText());
-					update();
-					listView.getSelectionModel().select(index);
-    				rename = false;
-    				cancel.fire();
+    				int index = userList.getList().get(userIndex).getAlbumList().getAlbumIndex(listView.getSelectionModel().getSelectedItem());
+    				Album a = new Album(albumTextField.getText());
+    				if (!albums.getList().contains(a)) {
+    					userList.getList().get(userIndex).getAlbumList().getAlbum(index).rename(albumTextField.getText());
+    					update();
+        				rename = false;
+        				cancel.fire();
+    					listView.getSelectionModel().select(a);
+    				}
+    				else {
+    					errorText.setVisible(true);
+    					errorText.setText("Error: Duplicate album");
+    				}
     			}
     			else if (!albumTextField.getText().isBlank()) {
     				Album a = new Album(albumTextField.getText());
     				if (!albums.getList().contains(a)) {
-    					uList.getList().get(userIndex).getAlbumList().addAlbum(a);
+    					userList.getList().get(userIndex).getAlbumList().addAlbum(a);
     					update();
-    					listView.getSelectionModel().select(albums.getList().get(albums.getAlbumIndex(a)));
+    					listView.getSelectionModel().select(a);
     					cancel.fire();
     				} else {
     					errorText.setVisible(true);
@@ -143,16 +161,41 @@ public class NonAdminController {
     			rename = true;
     		}
     	});
+    	
+    	openAlbum.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			if (!obsList.isEmpty()) {
+    				Album a = listView.getSelectionModel().getSelectedItem();
+					FXMLLoader loader = new FXMLLoader();
+					loader.setLocation(getClass().getResource("/view/albumview.fxml"));
+					Parent root = null;
+					try {
+						root = (Pane) loader.load();
+						AlbumController albumCon = loader.getController();
+						Stage stage = new Stage();
+						albumCon.start(stage,  newStage, a, user);
+						stage.setScene(new Scene(root, 987, 770));
+						stage.setResizable(false);
+						stage.show();
+						newStage.hide();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+
+    			}
+    		}
+    	});
     }
     
     public void update() {
 		try {
-			UserList.writeList(uList);
-			uList = UserList.readList();
+			UserList.writeList(userList);
+			userList = UserList.readList();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
-		albums = uList.getList().get(userIndex).getAlbumList();
+		albums = userList.getList().get(userIndex).getAlbumList();
 		obsList = FXCollections.observableArrayList(albums.getList());
 		obsList.sort((a,b) -> a.compareTo(b));
 		listView.setItems(obsList);

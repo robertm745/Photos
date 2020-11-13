@@ -26,7 +26,6 @@ public class Photos extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.show();
-		
 	}
 	
 	public static void reset() {
