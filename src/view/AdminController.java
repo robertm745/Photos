@@ -92,7 +92,7 @@ public class AdminController {
     
     public void update() {
 		try {
-			list.writeList();
+			UserList.writeList(list);
 			list = UserList.readList();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();

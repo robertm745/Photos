@@ -22,8 +22,11 @@ public class LoginController {
 	@FXML private Button login;
 	@FXML private TextField username;
 	@FXML private Text statusText;
+	
+	private UserList uList;
 
 	public void start(Stage primaryStage) throws Exception {
+		uList = UserList.readList();
 		login.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				if (username.getText().equalsIgnoreCase("admin")) {

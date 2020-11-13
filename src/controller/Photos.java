@@ -31,13 +31,13 @@ public class Photos extends Application {
 	
 	public static void reset() {
 		UserList list = new UserList();
-		list.addUser(new User("user1"));
-		list.addUser(new User("user3"));
-		list.addUser(new User("user2"));
+		list.addUser(new User("admin"));
+		//list.addUser(new User("user3"));
+		//list.addUser(new User("user2"));
 		//list.printUsers();
 		UserList listB;
 		try {
-			list.writeList();
+			UserList.writeList(list);
 			listB = UserList.readList();
 			listB.printUsers();
 		} catch (ClassNotFoundException | IOException e) {
