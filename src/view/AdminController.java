@@ -88,6 +88,7 @@ public class AdminController {
     			}
     		}
     	});
+    	
     }
     
     public void update() {
@@ -103,6 +104,7 @@ public class AdminController {
 		listView.getSelectionModel().select(0);
 		listView.requestFocus();
 		statusText.setVisible(false);
+		newUserTextField.clear();
     }
     
     

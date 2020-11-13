@@ -24,5 +24,16 @@ public class AlbumList implements Serializable {
 	public ArrayList<Album> getList() {
 		return this.albums;
 	}
+	public int getAlbumIndex(Album a) {
+		for (int i = 0; i < albums.size(); i++) {
+			if (albums.get(i).equals(a)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	public Album getAlbum(int index) {
+		return albums.get(index);
+	}
 
 }

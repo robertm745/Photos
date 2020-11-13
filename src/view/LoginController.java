@@ -26,6 +26,7 @@ public class LoginController {
 	private UserList uList;
 
 	public void start(Stage primaryStage) throws Exception {
+		username.clear();
 		uList = UserList.readList();
 		login.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
