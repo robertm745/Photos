@@ -13,9 +13,7 @@ public class User implements Serializable {
 	public User(String name) {
 		// TODO Auto-generated constructor stub
 		this.name = name;
-		this.albums = new AlbumList();        	
-		albums.addAlbum(new Album("sample2"));
-    	albums.addAlbum(new Album("sample1"));
+		this.albums = new AlbumList();
 	}
 	
 	public AlbumList getAlbumList() {
@@ -45,7 +43,6 @@ public class User implements Serializable {
 	}
 
 	
-	//@Override
 	public int compareTo(User u) {
 			return this.toString().compareTo(u.toString());
 	}

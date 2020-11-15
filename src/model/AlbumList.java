@@ -12,7 +12,6 @@ public class AlbumList implements Serializable {
 	private ArrayList<Album> albums;
 	
 	public AlbumList() {
-		// TODO Auto-generated constructor stub
 		this.albums = new ArrayList<Album>();
 	}
 	public void addAlbum(Album a) {

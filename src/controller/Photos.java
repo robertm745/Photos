@@ -1,11 +1,13 @@
 package controller;
 
 
-import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
@@ -30,25 +32,26 @@ public class Photos extends Application {
 	
 	public static void reset() {
 		UserList list = new UserList();
-		list.addUser(new User("admin"));
-		//list.addUser(new User("user3"));
-		//list.addUser(new User("user2"));
-		//list.printUsers();
-		UserList listB;
+		User u = new User("user");
+		list.addUser(u);
+		u.getAlbumList().addAlbum(new Album("album"));
 		try {
-			UserList.writeList(list);
-			listB = UserList.readList();
-			listB.printUsers();
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
+			Photo p = new Photo(new Image(new FileInputStream("src/stock/stock1.jpeg")));
+			p.setHashCode("src/stock/stock1.jpeg");
+			u.getAlbumList().getAlbum(0).getPhotoList().addPhoto(p);
+			p = new Photo(new Image(new FileInputStream("src/stock/stock2.jpeg")));
+			p.setHashCode("src/stock/stock2.jpeg");
+			u.getAlbumList().getAlbum(0).getPhotoList().addPhoto(p);
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		UserList.writeList(list);
 	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		//reset();
+		reset();
 		
 		launch(args);
 

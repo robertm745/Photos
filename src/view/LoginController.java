@@ -1,9 +1,7 @@
 package view;
 
 import java.io.IOException;
-import java.util.*;
 import model.*;
-import view.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -70,7 +68,7 @@ public class LoginController {
 							statusText.setVisible(false);
 						}
 						
-					} catch (ClassNotFoundException | IOException e1) {
+					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
 				}

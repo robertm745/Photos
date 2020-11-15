@@ -5,13 +5,9 @@ import java.io.IOException;
 import controller.Photos;
 import model.*;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
@@ -64,7 +60,7 @@ public class AdminController {
             				newUserTextField.clear();
     					} else {
     						list.delete(u);
-    						update();
+    						saveData();
     						if (list.getList().size() == index)
     							index--;
     						listView.getSelectionModel().select(index);
@@ -82,7 +78,7 @@ public class AdminController {
     				User u = new User(newUserTextField.getText());
     				if (!list.contains(u)) {
     					list.addUser(u);
-    					update();
+    					saveData();
     					listView.getSelectionModel().select(u);
     					listView.requestFocus();
     				} else {
@@ -98,13 +94,9 @@ public class AdminController {
     	
     }
     
-    public void update() {
-		try {
-			UserList.writeList(list);
-			list = UserList.readList();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+    public void saveData() {
+		UserList.writeList(list);
+		list = UserList.readList();
 		obsList = FXCollections.observableArrayList(list.getList());
 		obsList.sort((a,b) -> a.compareTo(b));
 		listView.setItems(obsList);

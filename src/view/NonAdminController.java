@@ -1,8 +1,6 @@
 package view;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import controller.Photos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,11 +40,7 @@ public class NonAdminController {
     private boolean rename;
     
     public void start(Stage newStage, User user) {
-    	try {
-			this.userList = UserList.readList();
-		} catch (ClassNotFoundException | IOException e2) {
-			e2.printStackTrace();
-		}
+		this.userList = UserList.readList();
 		newStage.setTitle(user + "'s Albums");
     	promptText.setText("Welcome, " + user + "!");
     	userIndex = userList.getUserIndex(user);
@@ -75,7 +69,7 @@ public class NonAdminController {
     			if (!listView.getSelectionModel().isEmpty()) {
     				int sel = listView.getSelectionModel().getSelectedIndex();
     				userList.getList().get(userIndex).getAlbumList().deleteAlbum(listView.getSelectionModel().getSelectedItem());
-    				update();
+    				saveData();
     				if (sel == albums.getList().size()) 
     					sel--;
     				listView.getSelectionModel().select(sel);
@@ -121,10 +115,14 @@ public class NonAdminController {
     		public void handle(ActionEvent e) {
     			if (rename) {
     				int index = userList.getList().get(userIndex).getAlbumList().getAlbumIndex(listView.getSelectionModel().getSelectedItem());
+    				if (albumTextField.getText().equals(listView.getSelectionModel().getSelectedItem().toString())) {
+    					cancel.fire();
+    					return;
+    				}
     				Album a = new Album(albumTextField.getText());
     				if (!albums.getList().contains(a)) {
     					userList.getList().get(userIndex).getAlbumList().getAlbum(index).rename(albumTextField.getText());
-    					update();
+    					saveData();
         				rename = false;
         				cancel.fire();
     					listView.getSelectionModel().select(a);
@@ -138,7 +136,7 @@ public class NonAdminController {
     				Album a = new Album(albumTextField.getText());
     				if (!albums.getList().contains(a)) {
     					userList.getList().get(userIndex).getAlbumList().addAlbum(a);
-    					update();
+    					saveData();
     					listView.getSelectionModel().select(a);
     					cancel.fire();
     				} else {
@@ -155,6 +153,8 @@ public class NonAdminController {
     	renameAlbum.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
+    			if (listView.getSelectionModel().isEmpty())
+    				return;
     			String name = listView.getSelectionModel().getSelectedItem().toString();
     			createAlbum.fire();
     			albumTextField.setText(name);
@@ -188,13 +188,9 @@ public class NonAdminController {
     	});
     }
     
-    public void update() {
-		try {
-			UserList.writeList(userList);
-			userList = UserList.readList();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+    public void saveData() {
+		UserList.writeList(userList);
+		userList = UserList.readList();
 		albums = userList.getList().get(userIndex).getAlbumList();
 		obsList = FXCollections.observableArrayList(albums.getList());
 		obsList.sort((a,b) -> a.compareTo(b));

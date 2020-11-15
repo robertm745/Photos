@@ -3,14 +3,19 @@ package model;
 import java.io.Serializable;
 
 public class Album implements Serializable {
-	/**
-	 * 
-	 */
+
+	
 	private static final long serialVersionUID = 1L;
 	private String name;
+	private PhotoList photoList;
+	
 	public Album(String name) {
-		// TODO Auto-generated constructor stub
 		this.name = name;
+		this.photoList = new PhotoList();
+	}
+	
+	public PhotoList getPhotoList() {
+		return this.photoList;
 	}
 	
 	public void rename(String name) {
@@ -30,7 +35,6 @@ public class Album implements Serializable {
 	}
 
 	
-	//@Override
 	public int compareTo(Album a) {
 			return this.toString().compareTo(a.toString());
 	}

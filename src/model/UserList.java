@@ -36,17 +36,32 @@ public class UserList implements Serializable {
 		return -1;
 	}
 	
-	public static void writeList(UserList ul) throws IOException {
+	public static void writeList(UserList ul) {
 		//ul.printUsers();
-		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
-		oos.writeObject(ul);
-		oos.close();
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
+			oos.writeObject(ul);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
-	public static UserList readList() throws ClassNotFoundException, IOException {
-		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile));
-		UserList list = (UserList) ois.readObject();
-		ois.close();
+	public static UserList readList() {
+		ObjectInputStream ois;
+		UserList list = null;
+		try {
+			ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile));
+			list = (UserList) ois.readObject();
+			ois.close();
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return list;
 	}
 	
@@ -64,6 +79,8 @@ public class UserList implements Serializable {
 			if (users.get(i).equals(user))
 				return true;
 		}
+		if (user.toString().equalsIgnoreCase("admin"))
+			return true;
 		return false;
 	}
 
