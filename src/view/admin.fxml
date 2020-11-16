@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="418.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AdminController">
+   <children>
+      <Text layoutX="274.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <ListView fx:id="listView" layoutX="44.0" layoutY="92.0" prefHeight="247.0" prefWidth="334.0" />
+      <Text layoutX="163.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Users in System">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Button fx:id="newUserButton" layoutX="433.0" layoutY="201.0" mnemonicParsing="false" text="Add New User">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="deleteUserButton" layoutX="137.0" layoutY="356.0" mnemonicParsing="false" text="Delete Selected User">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="logoutButton" layoutX="511.0" layoutY="17.0" mnemonicParsing="false" text="Logout">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <TextField fx:id="newUserTextField" layoutX="413.0" layoutY="150.0" promptText="Enter New User Name" />
+      <Text fx:id="statusText" layoutX="437.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Already Exists" />
+   </children>
+</Pane>
