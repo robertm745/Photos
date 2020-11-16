@@ -7,6 +7,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private ArrayList<Album> albums;
+
 	private ArrayList<String> tags;
 	
 
@@ -20,11 +21,22 @@ public class User implements Serializable {
 		albums.add(album);
 	}
 	
+	public void deleteAlbum(Album album) {
+		this.albums.remove(album);
+	}
+	
 	public void addTag(String tag) {
 		tags.add(tag);
 	}
-	
-	
+
+	public ArrayList<Album> getAlbums() {
+		return albums;
+	}
+
+	public boolean contains(String album) {
+		if (this.albums.contains(new Album(album))) return true;
+		else return false;
+	}
 	
 	public String getUsername() {
 		return username;

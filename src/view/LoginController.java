@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.User;
@@ -56,8 +57,10 @@ public class LoginController {
 					try {
 						User user = new User(username.getText());
 						if (username.getText().isBlank()) {
+							statusText.setFill(Color.RED);
 							statusText.setText("Please enter username");
 						} else if (!UserList.readList().contains(user)) {
+							statusText.setFill(Color.RED);
 							statusText.setText("Error: User not found");
 						} else {
 							FXMLLoader loader = new FXMLLoader();
@@ -68,7 +71,7 @@ public class LoginController {
 							root = loader.load();
 							// Get controller of scene2
 							NonAdminController nonAdminController = loader.getController();
-							nonAdminController.transferMessage(username.getText());
+							nonAdminController.transferMessage(user);
 							nonAdminController.start(primaryStage);
 							// Show scene 2 in new window
 							primaryStage.setScene(new Scene(root, 800, 600));

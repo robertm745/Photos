@@ -1,6 +1,8 @@
 package view;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import controller.Photos;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.*;
@@ -45,15 +48,18 @@ public class NonAdminController {
 	private Button save;
 
 //	private AlbumList albums;
-	private String user;
-	private int userIndex;
+	private User user;
+	private String mode = "";
 	private ObservableList<Album> obsList;
-	private UserList userList;
-	private boolean rename;
 
 	public void start(Stage primaryStage) {
 		
 		promptText.setText("Welcome " + user + "!");
+		
+		obsList = FXCollections.observableArrayList(user.getAlbums());
+		listView.setItems(obsList);
+		listView.getSelectionModel().select(0);
+		listView.requestFocus();
 		
 		logoutButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
@@ -75,11 +81,110 @@ public class NonAdminController {
 				}
     		
     	});
+		
+		
+		createAlbum.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+
+    			errorText.setText("");
+    			errorText.setFill(Color.BLACK);
+    			listView.setDisable(true);
+    			albumTextField.setVisible(true);
+    			cancel.setVisible(true);
+    			save.setVisible(true);
+    			deleteAlbum.setVisible(false);
+    			renameAlbum.setVisible(false);
+    			createAlbum.setVisible(false);
+    			openAlbum.setVisible(false);
+    			search.setVisible(false);
+    			mode = "create";
+    		}
+    	});
+		
+		save.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			if (mode.equals("create")) {
+    				if (!albumTextField.getText().strip().isEmpty()) {
+    					Album newAlbum = new Album(albumTextField.getText()); 
+    					if (user.contains(albumTextField.getText())) {
+    						errorText.setFill(Color.RED);
+    						errorText.setText("Error: Duplicate!");
+    					} else {
+    						obsList.add(newAlbum);
+    						user.addAlbum(newAlbum);
+
+    						errorText.setFill(Color.BLACK);
+    						errorText.setText("Added!");
+    						listView.getSelectionModel().select(newAlbum);
+    						
+    						reset();
+
+    					}
+    				} else {
+    					errorText.setFill(Color.RED);
+    					errorText.setText("Error: Name and artist required!");
+    				}
+    			}
+    		}
+    	});
+		
+		cancel.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				albumTextField.setVisible(false); 
+    			albumTextField.clear();
+    			cancel.setVisible(false);
+    			save.setVisible(false); 
+    			deleteAlbum.setVisible(true);
+    			renameAlbum.setVisible(true);
+    			createAlbum.setVisible(true);
+    			openAlbum.setVisible(true);
+    			search.setVisible(true);
+    			listView.setDisable(false);
+    			listView.requestFocus();
+			}
+			
+		});
+		
+		deleteAlbum.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			if (!listView.getSelectionModel().isEmpty()) {
+    				int index = listView.getSelectionModel().getSelectedIndex();
+    				user.deleteAlbum(listView.getSelectionModel().getSelectedItem());
+    				if (index == obsList.size()) 
+    					index--;
+    				listView.getSelectionModel().select(index);
+    				obsList.remove(index);
+    				errorText.setText("Deleted!");
+        			errorText.setFill(Color.BLACK);
+    				
+    			}
+    		}
+    	});
+		
 	}
 
+	public void reset() {
+		albumTextField.setVisible(false); 
+		albumTextField.clear();
+		cancel.setVisible(false);
+		save.setVisible(false); 
+		deleteAlbum.setVisible(true);
+		renameAlbum.setVisible(true);
+		createAlbum.setVisible(true);
+		openAlbum.setVisible(true);
+		search.setVisible(true);
+		listView.setDisable(false);
+		listView.requestFocus();
+	}
 	
-	public void transferMessage(String message) {
+	public void transferMessage(User user) {
         //Display the message
-        user = message;
+        this.user = user;
     }
 }
