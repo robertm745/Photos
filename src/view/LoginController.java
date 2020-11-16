@@ -17,8 +17,8 @@ import model.UserList;
 
 public class LoginController {
 	
-	@FXML private Button login;
-	@FXML private TextField username;
+	@FXML protected Button login;
+	@FXML protected TextField username;
 	@FXML private Text statusText;
 	
 
@@ -61,7 +61,7 @@ public class LoginController {
 							NonAdminController nonAdmin = loader.getController();
 							Stage stage = new Stage();
 							nonAdmin.start(stage, user);
-							stage.setScene(new Scene(root, 634, 475));
+							stage.setScene(new Scene(root, 634, 500));
 							stage.setResizable(false);
 							stage.show();
 							primaryStage.close();

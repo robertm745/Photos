@@ -10,6 +10,7 @@ public class AlbumList implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Album> albums;
+	private String dateRange;
 	
 	public AlbumList() {
 		this.albums = new ArrayList<Album>();
@@ -31,8 +32,13 @@ public class AlbumList implements Serializable {
 		}
 		return -1;
 	}
+	
 	public Album getAlbum(int index) {
 		return albums.get(index);
 	}
-
+	
+	public void updateDateRange() {
+		//for (int i = 0; i < )
+	}
+	
 }

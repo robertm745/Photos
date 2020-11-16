@@ -21,35 +21,53 @@ import model.*;
 
 public class NonAdminController {
 	@FXML private ListView<Album> listView;
-    @FXML private Text promptText;
     @FXML private Button search;
     @FXML private Button createAlbum;
     @FXML private Button renameAlbum;
     @FXML private Button deleteAlbum;
     @FXML private Button openAlbum;
     @FXML private Button logoutButton;
-    @FXML private TextField albumTextField;
-    @FXML private Text errorText;
     @FXML private Button cancel;
     @FXML private Button save;
+    @FXML private TextField albumTextField;
+    @FXML private Text errorText;
+    @FXML private Text promptText;
+    @FXML private Text numPics;
+    @FXML private Text dateRange;
     
     private AlbumList albums;
     private int userIndex;
     private ObservableList<Album> obsList;
-    private UserList userList;
+    protected UserList userList;
     private boolean rename;
+    protected NonAdminController nac;
+    
     
     public void start(Stage newStage, User user) {
-		this.userList = UserList.readList();
+    	this.nac = this;
 		newStage.setTitle(user + "'s Albums");
     	promptText.setText("Welcome, " + user + "!");
+    	
+		this.userList = UserList.readList();
     	userIndex = userList.getUserIndex(user);
     	albums = userList.getList().get(userList.getUserIndex(user)).getAlbumList();
+		for (Album a : userList.getList().get(userIndex).getAlbumList().getList()) {
+			//System.out.println(a);
+			for (Photo p : a.getPhotoList().getList()) {
+				p.setDateTime();
+			}
+			//System.out.println();
+		}
+		saveData();
+		
     	obsList = FXCollections.observableArrayList(albums.getList());
     	obsList.sort((a,b) -> a.compareTo(b));
     	listView.setItems(obsList);
 		listView.getSelectionModel().select(0);
-		listView.requestFocus();
+		updateListView();
+		
+		listView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> updateListView());
+		
 		
     	logoutButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
@@ -174,7 +192,7 @@ public class NonAdminController {
 						root = (Pane) loader.load();
 						AlbumController albumCon = loader.getController();
 						Stage stage = new Stage();
-						albumCon.start(stage,  newStage, a, user);
+						albumCon.start(stage,  newStage, a, user, nac);
 						stage.setScene(new Scene(root, 987, 770));
 						stage.setResizable(false);
 						stage.show();
@@ -199,5 +217,21 @@ public class NonAdminController {
 		listView.requestFocus();
     }
     
+    public void readData() {
+    	userList = UserList.readList();
+    }
+    
+    public void updateListView() {
+    	Album a = listView.getSelectionModel().getSelectedItem();
+    	if (a != null ) {
+    		numPics.setVisible(true);
+    		numPics.setText(a.getSize() + "");
+    	}
+    	else {
+    		numPics.setVisible(false);	
+    	}    		
+    	
+    	
+    }
 
 }

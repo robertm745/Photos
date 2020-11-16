@@ -8,6 +8,7 @@ public class Album implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private PhotoList photoList;
+	private String dateRange;
 	
 	public Album(String name) {
 		this.name = name;
@@ -37,6 +38,10 @@ public class Album implements Serializable {
 	
 	public int compareTo(Album a) {
 			return this.toString().compareTo(a.toString());
+	}
+
+	public int getSize() {
+		return this.photoList.getList().size();
 	}
 	
 }
