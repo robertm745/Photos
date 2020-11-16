@@ -42,7 +42,7 @@ public class LoginController {
 						AdminController adminController = loader.getController();
 						adminController.start(primaryStage);
 						// Show scene 2 in new window
-						primaryStage.setScene(new Scene(root, 800, 600));
+						primaryStage.setScene(new Scene(root, 990, 770));
 						primaryStage.setTitle("Admin");
 						primaryStage.show();
 
@@ -74,7 +74,7 @@ public class LoginController {
 							nonAdminController.transferMessage(user);
 							nonAdminController.start(primaryStage);
 							// Show scene 2 in new window
-							primaryStage.setScene(new Scene(root, 800, 600));
+							primaryStage.setScene(new Scene(root, 990, 770));
 							primaryStage.setTitle("Non admin");
 							primaryStage.show();
 

@@ -61,7 +61,7 @@ public class AdminController {
     	            //Get controller of scene2
     	            LoginController loginController = loader.getController();  
     	            loginController.start(primaryStage);
-    	            primaryStage.setScene(new Scene(root, 800, 600));
+    	            primaryStage.setScene(new Scene(root, 990, 770));
     	            primaryStage.setTitle("Photos login");
     	            primaryStage.show();
     	        } catch (IOException ex) {

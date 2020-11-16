@@ -53,127 +53,146 @@ public class NonAdminController {
 	private ObservableList<Album> obsList;
 
 	public void start(Stage primaryStage) {
-		
+
 		promptText.setText("Welcome " + user + "!");
-		
+
 		obsList = FXCollections.observableArrayList(user.getAlbums());
 		listView.setItems(obsList);
 		listView.getSelectionModel().select(0);
 		listView.requestFocus();
-		
+
 		logoutButton.setOnAction(new EventHandler<ActionEvent>() {
-    		@Override
-    		public void handle(ActionEvent e) {
-    			try {
-    	            //Load second scene
-    	            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Login.fxml"));
-    	            Parent root = loader.load();
-    	             
-    	            //Get controller of scene2
-    	            LoginController loginController = loader.getController();  
-    	            loginController.start(primaryStage);
-    	            primaryStage.setScene(new Scene(root, 800, 600));
-    	            primaryStage.setTitle("Photos login");
-    	            primaryStage.show();
-    	        } catch (IOException ex) {
-    	            System.err.println(ex);
-    	        }
+			@Override
+			public void handle(ActionEvent e) {
+				try {
+					// Load second scene
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Login.fxml"));
+					Parent root = loader.load();
+
+					// Get controller of scene2
+					LoginController loginController = loader.getController();
+					loginController.start(primaryStage);
+					primaryStage.setScene(new Scene(root, 990, 770));
+					primaryStage.setTitle("Photos login");
+					primaryStage.show();
+				} catch (IOException ex) {
+					System.err.println(ex);
 				}
-    		
-    	});
-		
-		
+			}
+
+		});
+
 		createAlbum.setOnAction(new EventHandler<ActionEvent>() {
-    		@Override
-    		public void handle(ActionEvent e) {
+			@Override
+			public void handle(ActionEvent e) {
 
-    			errorText.setText("");
-    			errorText.setFill(Color.BLACK);
-    			listView.setDisable(true);
-    			albumTextField.setVisible(true);
-    			cancel.setVisible(true);
-    			save.setVisible(true);
-    			deleteAlbum.setVisible(false);
-    			renameAlbum.setVisible(false);
-    			createAlbum.setVisible(false);
-    			openAlbum.setVisible(false);
-    			search.setVisible(false);
-    			mode = "create";
-    		}
-    	});
-		
+				errorText.setText("");
+				errorText.setFill(Color.BLACK);
+				listView.setDisable(true);
+				albumTextField.setVisible(true);
+				cancel.setVisible(true);
+				save.setVisible(true);
+				deleteAlbum.setVisible(false);
+				renameAlbum.setVisible(false);
+				createAlbum.setVisible(false);
+				openAlbum.setVisible(false);
+				search.setVisible(false);
+				mode = "create";
+			}
+		});
+
 		save.setOnAction(new EventHandler<ActionEvent>() {
-    		@Override
-    		public void handle(ActionEvent e) {
-    			if (mode.equals("create")) {
-    				if (!albumTextField.getText().strip().isEmpty()) {
-    					Album newAlbum = new Album(albumTextField.getText()); 
-    					if (user.contains(albumTextField.getText())) {
-    						errorText.setFill(Color.RED);
-    						errorText.setText("Error: Duplicate!");
-    					} else {
-    						obsList.add(newAlbum);
-    						user.addAlbum(newAlbum);
+			@Override
+			public void handle(ActionEvent e) {
+				if (mode.equals("create")) {
+					if (!albumTextField.getText().strip().isEmpty()) {
+						Album newAlbum = new Album(albumTextField.getText());
+						if (user.contains(albumTextField.getText())) {
+							errorText.setFill(Color.RED);
+							errorText.setText("Error: Duplicate!");
+						} else {
+							obsList.add(newAlbum);
+							user.addAlbum(newAlbum);
 
-    						errorText.setFill(Color.BLACK);
-    						errorText.setText("Added!");
-    						listView.getSelectionModel().select(newAlbum);
-    						
-    						reset();
+							errorText.setFill(Color.BLACK);
+							errorText.setText("Added!");
+							listView.getSelectionModel().select(newAlbum);
 
-    					}
-    				} else {
-    					errorText.setFill(Color.RED);
-    					errorText.setText("Error: Name and artist required!");
-    				}
-    			}
-    		}
-    	});
-		
+							reset();
+
+						}
+					} else {
+						errorText.setFill(Color.RED);
+						errorText.setText("Error: Name and artist required!");
+					}
+				}
+			}
+		});
+
 		cancel.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				albumTextField.setVisible(false); 
-    			albumTextField.clear();
-    			cancel.setVisible(false);
-    			save.setVisible(false); 
-    			deleteAlbum.setVisible(true);
-    			renameAlbum.setVisible(true);
-    			createAlbum.setVisible(true);
-    			openAlbum.setVisible(true);
-    			search.setVisible(true);
-    			listView.setDisable(false);
-    			listView.requestFocus();
+				albumTextField.setVisible(false);
+				albumTextField.clear();
+				cancel.setVisible(false);
+				save.setVisible(false);
+				deleteAlbum.setVisible(true);
+				renameAlbum.setVisible(true);
+				createAlbum.setVisible(true);
+				openAlbum.setVisible(true);
+				search.setVisible(true);
+				listView.setDisable(false);
+				listView.requestFocus();
 			}
-			
+
 		});
-		
+
 		deleteAlbum.setOnAction(new EventHandler<ActionEvent>() {
-    		@Override
-    		public void handle(ActionEvent e) {
-    			if (!listView.getSelectionModel().isEmpty()) {
-    				int index = listView.getSelectionModel().getSelectedIndex();
-    				user.deleteAlbum(listView.getSelectionModel().getSelectedItem());
-    				if (index == obsList.size()) 
-    					index--;
-    				listView.getSelectionModel().select(index);
-    				obsList.remove(index);
-    				errorText.setText("Deleted!");
-        			errorText.setFill(Color.BLACK);
-    				
-    			}
-    		}
-    	});
-		
+			@Override
+			public void handle(ActionEvent e) {
+				if (!listView.getSelectionModel().isEmpty()) {
+					int index = listView.getSelectionModel().getSelectedIndex();
+					user.deleteAlbum(listView.getSelectionModel().getSelectedItem());
+					if (index == obsList.size())
+						index--;
+					listView.getSelectionModel().select(index);
+					obsList.remove(index);
+					errorText.setText("Deleted!");
+					errorText.setFill(Color.BLACK);
+
+				}
+			}
+		});
+
+		openAlbum.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				try {
+					// Load second scene
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/album.fxml"));
+					Parent root = loader.load();
+
+					// Get controller of scene2
+					AlbumController albumController = loader.getController();
+					albumController.start(primaryStage);
+					primaryStage.setScene(new Scene(root, 990, 770));
+					primaryStage.setTitle("Album");
+					primaryStage.show();
+				} catch (IOException ex) {
+					System.err.println(ex);
+				}
+			}
+		});
+
 	}
 
 	public void reset() {
-		albumTextField.setVisible(false); 
+		albumTextField.setVisible(false);
 		albumTextField.clear();
 		cancel.setVisible(false);
-		save.setVisible(false); 
+		save.setVisible(false);
 		deleteAlbum.setVisible(true);
 		renameAlbum.setVisible(true);
 		createAlbum.setVisible(true);
@@ -182,9 +201,9 @@ public class NonAdminController {
 		listView.setDisable(false);
 		listView.requestFocus();
 	}
-	
+
 	public void transferMessage(User user) {
-        //Display the message
-        this.user = user;
-    }
+		// Display the message
+		this.user = user;
+	}
 }
