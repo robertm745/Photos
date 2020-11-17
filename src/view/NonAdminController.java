@@ -114,8 +114,7 @@ public class NonAdminController {
     	cancel.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
-    			dateRange.setVisible(true);
-    			numPics.setVisible(true);
+    			updateListView();
     			albumTextField.setVisible(false); 
     			albumTextField.clear();
     			cancel.setVisible(false);
@@ -207,6 +206,32 @@ public class NonAdminController {
     			}
     		}
     	});
+    	
+    	
+    	search.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			FXMLLoader loader = new FXMLLoader();
+    			loader.setLocation(getClass().getResource("/view/search.fxml"));
+    			Parent root = null;
+    			try {
+					root = (Pane) loader.load();
+					SearchController sc = loader.getController();
+					Stage stage = new Stage();
+					sc.start(stage, newStage, user);
+					stage.setScene(new Scene(root, 600, 400));
+					stage.setResizable(false);
+					stage.show();
+					newStage.hide();
+					
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+    		}
+    	});
+    	
+    	
+    	
     }
     
     public void saveData() {

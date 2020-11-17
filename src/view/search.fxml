@@ -8,23 +8,23 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.SearchController">
    <children>
-      <TextField layoutX="264.0" layoutY="84.0" prefHeight="25.0" prefWidth="211.0" promptText="Enter First Tag-Value pair" visible="false" />
-      <RadioButton layoutX="43.0" layoutY="76.0" mnemonicParsing="false" selected="true" text="Search by Date" />
-      <RadioButton layoutX="43.0" layoutY="134.0" mnemonicParsing="false" text="Search by Tags" />
-      <TextField layoutX="264.0" layoutY="175.0" prefHeight="25.0" prefWidth="211.0" promptText="Enter Second Tag-Value pair" visible="false" />
-      <RadioButton layoutX="298.0" layoutY="134.0" mnemonicParsing="false" text="AND" visible="false" />
-      <RadioButton layoutX="399.0" layoutY="134.0" mnemonicParsing="false" text="OR" visible="false" />
-      <Button layoutX="332.0" layoutY="335.0" mnemonicParsing="false" text="Search by Date Range" />
-      <Text layoutX="274.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
+      <RadioButton fx:id="searchByDate" layoutX="41.0" layoutY="97.0" mnemonicParsing="false" selected="true" text="Search by Date" />
+      <RadioButton fx:id="searchByTags" layoutX="41.0" layoutY="155.0" mnemonicParsing="false" text="Search by Tags" />
+      <RadioButton fx:id="andRadio" layoutX="298.0" layoutY="134.0" mnemonicParsing="false" text="AND" visible="false"/>
+      <RadioButton fx:id="orRadio" layoutX="399.0" layoutY="134.0" mnemonicParsing="false" text="OR" visible="false"/>
+      <Button fx:id="search" layoutX="257.0" layoutY="329.0" mnemonicParsing="false" text="Search for Photos" />
+      <Button fx:id="backToAlbums" layoutX="26.0" layoutY="23.0" mnemonicParsing="false" text="Back to Albums" />
+      <Button fx:id="logout" layoutX="519.0" layoutY="22.0" mnemonicParsing="false" text="Logout" />
+      <Text layoutX="286.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <DatePicker layoutX="312.0" layoutY="72.0" promptText="Enter Start Date" />
-      <DatePicker layoutX="311.0" layoutY="206.0" promptText="Enter End Date" />
-      <Button layoutX="67.0" layoutY="335.0" mnemonicParsing="false" text="Back to Albums" />
-      <Button layoutX="538.0" layoutY="10.0" mnemonicParsing="false" text="Logout" />
+      <TextField fx:id="tagFieldTwo" layoutX="264.0" layoutY="175.0" prefHeight="25.0" prefWidth="211.0" promptText="Enter Second Tag-Value pair" visible="false"/>
+      <TextField fx:id="tagFieldOne" layoutX="264.0" layoutY="84.0" prefHeight="25.0" prefWidth="211.0" promptText="Enter First Tag-Value pair" visible="false"/>
+      <DatePicker fx:id="datePickFrom" layoutX="312.0" layoutY="81.0" promptText="Enter Start Date" />
+      <DatePicker fx:id="datePickTo" layoutX="312.0" layoutY="188.0" promptText="Enter End Date" />
    </children>
 </Pane>

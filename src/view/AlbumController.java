@@ -69,7 +69,6 @@ public class AlbumController {
     private boolean captionState;
     private boolean copyState;
     private boolean tagState;
-    //private ObservableList<String> albumOptions;
 	
     public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac) {
     	userList = UserList.readList();
