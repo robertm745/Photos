@@ -236,7 +236,7 @@ public class AlbumController {
             				errorText.setText("Error: please enter tag type and value");
     					} else {
     						user.addTag(tagtypeField.getText());
-        					album.getPhoto(photoListView.getSelectionModel().getSelectedItem()).addTag(tagtypeField.getText(), tagvalueField.getText());
+    						userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).addTag(tagtypeField.getText(), tagvalueField.getText());
         					saveData();
         	    			cancel.fire();
         	    			updatePhotoListView();
@@ -249,7 +249,7 @@ public class AlbumController {
     						errorText.setVisible(true);
             				errorText.setText("Error: please enter tag value");
     					} else {
-    						album.getPhoto(photoListView.getSelectionModel().getSelectedItem()).addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
+    						userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
         					saveData();
         	    			cancel.fire();
         	    			updatePhotoListView();
