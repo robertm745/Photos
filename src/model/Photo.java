@@ -59,6 +59,28 @@ public class Photo implements Serializable {
 		}
 	}
 	
+	public void removeTag(String value) {
+		String[] values = value.split("\\|");
+		tags.get(values[0]).remove(values[1]);
+		if (tags.get(values[0]).size() == 0) {
+			tags.remove(values[0]);
+		}
+		
+		
+	}
+	
+	public ArrayList<String> getTagsList(){
+		ArrayList<String> retValue = new ArrayList<String>();
+		
+		for (String key: tags.keySet()) {
+			for(String value: tags.get(key)) {
+				retValue.add(key + "|" + value);
+			}
+		}
+		
+		return retValue;
+	}
+	
 		
 	public String toString() {
 		return this.path;
