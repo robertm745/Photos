@@ -4,19 +4,13 @@ import model.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-
 import controller.Photos;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -416,7 +410,7 @@ public class AlbumController {
 			tagobsList = FXCollections.observableArrayList(userList.getList().get(userIndex).getAlbumList().getList().get(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).getTagsList());
 			tagsListView.setItems(tagobsList);
 			
-			if (ph.getCaption() != null && !ph.getCaption().isBlank()) {
+			if (!ph.getCaption().isBlank()) {
 				captionLabel.setVisible(true);
 				captionText.setVisible(true);
 				captionText.setText(ph.getCaption());

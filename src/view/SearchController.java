@@ -1,14 +1,21 @@
 package view;
 
 import model.*;
+
+import java.io.IOException;
+
 import controller.Photos;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class SearchController {
@@ -91,7 +98,27 @@ public class SearchController {
     		}
     	});
     	
-
+    	search.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("/view/search_results.fxml"));
+				Parent root = null;
+				try {
+					root = (Pane) loader.load();
+					SearchResultsController sr = loader.getController();
+					Stage stage = new Stage();
+					sr.start(stage,  newStage, new Album(""), user, nac);
+					stage.setScene(new Scene(root, 987, 770));
+					stage.setResizable(false);
+					stage.show();
+					newStage.hide();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+    		}
+    	});
+    	
     	
     }
     
