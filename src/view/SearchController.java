@@ -1,6 +1,7 @@
 package view;
 
 import model.*;
+import controller.Photos;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -27,6 +28,34 @@ public class SearchController {
     private UserList userList;
     
     public void start(Stage newStage, Stage oldStage, User user, NonAdminController nac) {
+    	
+    	this.userList = UserList.readList();
+    	
+    	logout.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			newStage.close();
+    			oldStage.close();
+    			try {
+					new Photos().start(new Stage());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+    		}
+    	});
+    	
+    	backToAlbums.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			newStage.close();
+    			oldStage.setOnShown(f -> {
+    				nac.userList = userList;
+    				nac.saveData();
+    				nac.updateListView();
+    			});
+    			oldStage.show();
+    		}
+    	});
     	
     	searchByDate.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
@@ -62,18 +91,7 @@ public class SearchController {
     		}
     	});
     	
-    	backToAlbums.setOnAction(new EventHandler<ActionEvent>() {
-    		@Override
-    		public void handle(ActionEvent e) {
-    			newStage.close();
-    			oldStage.setOnShown(f -> {
-    				nac.userList = userList;
-    				nac.saveData();
-    				nac.updateListView();
-    			});
-    			oldStage.show();
-    		}
-    	});
+
     	
     }
     
