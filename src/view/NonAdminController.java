@@ -218,7 +218,7 @@ public class NonAdminController {
 					root = (Pane) loader.load();
 					SearchController sc = loader.getController();
 					Stage stage = new Stage();
-					sc.start(stage, newStage, user);
+					sc.start(stage, newStage, user, nac);
 					stage.setScene(new Scene(root, 600, 400));
 					stage.setResizable(false);
 					stage.show();

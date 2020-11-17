@@ -24,8 +24,9 @@ public class SearchController {
     @FXML private DatePicker datePickFrom;
     @FXML private DatePicker datePickTo;
 
+    private UserList userList;
     
-    public void start(Stage newStage, Stage oldStage, User user) {
+    public void start(Stage newStage, Stage oldStage, User user, NonAdminController nac) {
     	
     	searchByDate.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
@@ -58,6 +59,19 @@ public class SearchController {
     		@Override
     		public void handle(ActionEvent e) {
     			tagRadioState(false);
+    		}
+    	});
+    	
+    	backToAlbums.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			newStage.close();
+    			oldStage.setOnShown(f -> {
+    				nac.userList = userList;
+    				nac.saveData();
+    				nac.updateListView();
+    			});
+    			oldStage.show();
     		}
     	});
     	
