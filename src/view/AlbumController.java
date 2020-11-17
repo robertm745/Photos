@@ -4,8 +4,11 @@ import model.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 import controller.Photos;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -50,6 +53,7 @@ public class AlbumController {
     @FXML private Text captionLabel;
     @FXML private TextField CCMfield;
     @FXML private ComboBox<Album> albumCB;
+    @FXML private ComboBox<String> tagCB;
     
     private UserList userList;
     private User user;
@@ -195,7 +199,8 @@ public class AlbumController {
     			photoListView.setDisable(false);
     			copyState = false;
     			captionState = false;
-    			albumCB.setVisible(false);        			
+    			albumCB.setVisible(false);     
+    			tagCB.setVisible(false);
     			
     		}
     	});
@@ -285,6 +290,35 @@ public class AlbumController {
     				copyState = false;
     				save.setText("Move");
     			}    			
+    		}
+    	});
+    	
+    	newTag.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			changeState();
+    			newCaption.setVisible(false);
+				copyPhoto.setVisible(false);
+				movePhoto.setVisible(false);
+    			newCaption.setDisable(true); 
+    			tagCB.setVisible(true);    	
+    			tagCB.getSelectionModel().clearSelection();
+
+    			tagCB.setPromptText("Select tag type");
+    			
+    			ObservableList<String> list = FXCollections.observableArrayList();
+    			list.add("Create new tag");
+    			list.addAll(user.getTags());
+    			
+    			tagCB.setItems(list);
+    			
+    			tagCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+    				System.out.println("Tag Name: " + newValue);
+    			});
+    			
+ 
+    			
+
     		}
     	});
     	
