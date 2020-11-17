@@ -44,7 +44,6 @@ public class LoginController {
 						adminController.transferMessage(userlist);
 						adminController.start(primaryStage);
 						primaryStage.setScene(new Scene(root, 990, 770));
-						primaryStage.setTitle("Admin system");
 						primaryStage.show();
 					} catch (IOException ex) {
 						ex.printStackTrace();
@@ -73,7 +72,6 @@ public class LoginController {
 							nonAdminController.start(primaryStage);
 							// Show scene 2 in new window
 							primaryStage.setScene(new Scene(root, 990, 770));
-							primaryStage.setTitle("Non admin");
 							primaryStage.show();
 
 						}

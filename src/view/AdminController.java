@@ -58,7 +58,6 @@ public class AdminController {
     	            loginController.transferMessage(userlist);
     	            loginController.start(primaryStage);
     	            primaryStage.setScene(new Scene(root, 990, 770));
-    	            primaryStage.setTitle("Photos login");
     	            primaryStage.show();
     	        } catch (IOException ex) {
     	            System.err.println(ex);

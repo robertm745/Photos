@@ -37,11 +37,11 @@
             <Font size="18.0" />
          </font>
       </Text>
-      <Text fx:id="captionLabel" layoutX="559.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Caption:" visible="false" />
+      <Text fx:id="captionLabel" layoutX="559.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Caption:" />
       <Text fx:id="errorText" layoutX="775.0" layoutY="702.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error: Album does not exist" visible="false" />
       <Text layoutX="560.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date Taken:" />
-      <Text fx:id="captionText" layoutX="663.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="photo caption" visible="false" />
-      <Text fx:id="dateText" layoutX="663.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="data photo taken" />
+      <Text fx:id="captionText" layoutX="663.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+      <Text fx:id="dateText" layoutX="663.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <TextField fx:id="CCMvalue" layoutX="774.0" layoutY="573.0" prefHeight="25.0" prefWidth="149.0" promptText="caption/move/copy value" visible="false" />
       <TextField fx:id="CCMfield" layoutX="774.0" layoutY="537.0" promptText="Enter new caption" visible="false" />
    </children>

@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -112,6 +116,26 @@ public class AlbumController {
 		
 		photoListView.getSelectionModel().select(0);
 		photoListView.requestFocus();
+		
+		photoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Photo>() {
+			/* listen for selection changes to listView */
+			public void changed(ObservableValue<? extends Photo> observable, Photo oldValue, Photo newValue) {
+				if (photoListView.getSelectionModel().getSelectedIndex() != -1) {
+					/* statusText.setText("Selection changed!"); */
+					try {
+						imageView.setImage(new Image(new FileInputStream(photoListView.getSelectionModel().getSelectedItem().getLocation())));
+						Date lastModified = new Date(new File(photoListView.getSelectionModel().getSelectedItem().getLocation()).lastModified());
+						dateText.setText(""+lastModified);
+						captionText.setText(photoListView.getSelectionModel().getSelectedItem().getCaption());
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					
+				}
+			}
+		});
 
 		logout.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -126,7 +150,6 @@ public class AlbumController {
 					loginController.transferMessage(userlist);
 					loginController.start(primaryStage);
 					primaryStage.setScene(new Scene(root, 990, 770));
-					primaryStage.setTitle("Photos login");
 					primaryStage.show();
 				} catch (IOException ex) {
 					System.err.println(ex);
