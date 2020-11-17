@@ -392,6 +392,7 @@ public class AlbumController {
 		UserList.writeList(userList);
 		userList = UserList.readList();
 		this.album = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex);
+		//this.tagobsList = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPh
 		obsList = FXCollections.observableArrayList(this.album.getPaths());
 		//obsList.sort((a,b) -> a.compareTo(b));
 		photoListView.setItems(obsList);
@@ -412,7 +413,7 @@ public class AlbumController {
 			dateText.setText(ph.getDateTime().getTime().toString());
 			errorText.setVisible(false);
 			
-			tagobsList = FXCollections.observableArrayList(album.getPhoto(photoListView.getSelectionModel().getSelectedItem()).getTagsList());
+			tagobsList = FXCollections.observableArrayList(userList.getList().get(userIndex).getAlbumList().getList().get(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).getTagsList());
 			tagsListView.setItems(tagobsList);
 			
 			if (ph.getCaption() != null && !ph.getCaption().isBlank()) {
