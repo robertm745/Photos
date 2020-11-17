@@ -2,7 +2,9 @@ package model;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class Photo implements Serializable {
 	
@@ -10,6 +12,7 @@ public class Photo implements Serializable {
 	private String caption;
 	private String path;
 	private Calendar datetime;
+	private HashMap<String, ArrayList<String>> tags;
 	
 	
 	public Photo(String path, long datetime) {
@@ -18,6 +21,7 @@ public class Photo implements Serializable {
 		this.datetime.setTimeInMillis(datetime);
 		this.datetime.set(Calendar.MILLISECOND, 0);
 		this.caption = "";
+		tags = new HashMap<String, ArrayList<String>>();
 	}
 	
 	public Photo(String path, long datetime, String caption) {
@@ -46,6 +50,16 @@ public class Photo implements Serializable {
 		this.datetime.set(Calendar.MILLISECOND, 0);
 	}
 	
+	public void addTag(String key, String value) {
+		if (tags.containsKey(key)) {
+			tags.get(key).add(value);
+		} else {
+			tags.put(key, new ArrayList<>());
+			tags.get(key).add(value);
+		}
+	}
+	
+		
 	public String toString() {
 		return this.path;
 	}

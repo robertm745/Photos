@@ -45,5 +45,6 @@
       <Text fx:id="dateText" layoutX="663.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="data photo taken" />
       <TextField fx:id="CCMfield" layoutX="774.0" layoutY="537.0" promptText="Enter new caption" visible="false" />
       <ComboBox fx:id="albumCB" editable="false" layoutX="773.0" layoutY="573.0" prefWidth="150.0" promptText="Select Album" visible="false" />
+      <ComboBox fx:id="tagCB" layoutX="773.0" layoutY="453.0" prefWidth="150.0" visible="false" />
    </children>
 </Pane>

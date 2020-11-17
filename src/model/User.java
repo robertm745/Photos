@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable {
 	/**
@@ -9,11 +10,23 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private AlbumList albums;
+	private ArrayList<String> tags;
 	
 	public User(String name) {
 		// TODO Auto-generated constructor stub
 		this.name = name;
 		this.albums = new AlbumList();
+		tags = new ArrayList<String>();
+		tags.add("location");
+		tags.add("person");
+	}
+	
+	public void addTag(String e) {
+		tags.add(e);
+	}
+	
+	public ArrayList<String> getTags(){
+		return tags;
 	}
 	
 	public AlbumList getAlbumList() {
