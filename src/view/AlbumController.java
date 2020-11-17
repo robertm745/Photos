@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -117,22 +119,19 @@ public class AlbumController {
 		photoListView.getSelectionModel().select(0);
 		photoListView.requestFocus();
 		
+		if (photoListView.getSelectionModel().getSelectedIndex() != -1) {
+			/* if a item is selected */
+			setData(primaryStage);
+		}
+		
 		photoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Photo>() {
 			/* listen for selection changes to listView */
 			public void changed(ObservableValue<? extends Photo> observable, Photo oldValue, Photo newValue) {
 				if (photoListView.getSelectionModel().getSelectedIndex() != -1) {
-					/* statusText.setText("Selection changed!"); */
-					try {
-						imageView.setImage(new Image(new FileInputStream(photoListView.getSelectionModel().getSelectedItem().getLocation())));
-						Date lastModified = new Date(new File(photoListView.getSelectionModel().getSelectedItem().getLocation()).lastModified());
-						dateText.setText(""+lastModified);
-						captionText.setText(photoListView.getSelectionModel().getSelectedItem().getCaption());
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} else {
+					setData(primaryStage);
 					
+				} else {
+					clearData(primaryStage);
 				}
 			}
 		});
@@ -163,20 +162,25 @@ public class AlbumController {
     		public void handle(ActionEvent e) {
     			FileChooser fileChooser = new FileChooser();
     			fileChooser.getExtensionFilters().addAll( new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
-     			File file = fileChooser.showOpenDialog(new Stage());
-    			if (file != null) {
-    				Photo photo = new Photo(file);    
-    				obsList.add(photo);
-    				album.addPhoto(photo);    				
-    				photoListView.getSelectionModel().select(photo);
-    				
-    				try {
-						UserList.write(userlist);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-    			}
+    			List<File> selectedFiles = fileChooser.showOpenMultipleDialog(new Stage());
+     			if (selectedFiles != null) {
+     				 for (int i = 0; i < selectedFiles.size(); i++) {
+     					Photo photo = new Photo(selectedFiles.get(i));
+     					obsList.add(photo);
+        				album.addPhoto(photo);    				
+        				photoListView.getSelectionModel().select(photo);
+        				
+        				try {
+    						UserList.write(userlist);
+    					} catch (IOException e1) {
+    						// TODO Auto-generated catch block
+    						e1.printStackTrace();
+    					}
+     					
+     				 }
+     			    
+     			}
+     
     		}
     	});
 		
@@ -193,6 +197,14 @@ public class AlbumController {
     				photoListView.getSelectionModel().select(index);
     				errorText.setFill(Color.BLACK);
     				errorText.setText("Deleted!");
+    				
+    				try {
+						UserList.write(userlist);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+    				
     			} else {
     				errorText.setFill(Color.BLACK);
     				errorText.setText("Empty!");
@@ -202,6 +214,24 @@ public class AlbumController {
     	});
 		
 		
+	}
+	
+	public void setData(Stage primaryStage) {
+		try {
+			imageView.setImage(new Image(new FileInputStream(photoListView.getSelectionModel().getSelectedItem().getLocation())));
+			Date lastModified = new Date(new File(photoListView.getSelectionModel().getSelectedItem().getLocation()).lastModified());
+			dateText.setText(""+lastModified);
+			captionText.setText(photoListView.getSelectionModel().getSelectedItem().getCaption());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void clearData(Stage primaryStage) {
+		dateText.setText("");
+		captionText.setText("");
+		imageView.setImage(null);
 	}
 
 	public void transferMessage(UserList userlist, User user, Album album) {

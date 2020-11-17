@@ -153,7 +153,11 @@ public class NonAdminController {
 		deleteAlbum.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				if (!listView.getSelectionModel().isEmpty()) {
+				if (obsList.isEmpty()) {
+					errorText.setFill(Color.RED);
+					errorText.setText("No album to delete");
+				} else {
+
 					int index = listView.getSelectionModel().getSelectedIndex();
 					user.deleteAlbum(listView.getSelectionModel().getSelectedItem());
 					if (index == obsList.size())
@@ -170,22 +174,41 @@ public class NonAdminController {
 		openAlbum.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				try {
-					// Load second scene
-					FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/album.fxml"));
-					Parent root = loader.load();
 
-					// Get controller of scene2
-					AlbumController albumController = loader.getController();
-					albumController.transferMessage(userlist, user, listView.getSelectionModel().getSelectedItem());
-					albumController.start(primaryStage);
-					primaryStage.setScene(new Scene(root, 990, 770));
-					primaryStage.show();
-				} catch (IOException ex) {
-					System.err.println(ex);
+				if (obsList.isEmpty()) {
+					errorText.setFill(Color.RED);
+					errorText.setText("No album to open");
+				} else {
+					try {
+						// Load second scene
+						FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/album.fxml"));
+						Parent root = loader.load();
+
+						// Get controller of scene2
+						AlbumController albumController = loader.getController();
+						albumController.transferMessage(userlist, user, listView.getSelectionModel().getSelectedItem());
+						albumController.start(primaryStage);
+						primaryStage.setScene(new Scene(root, 990, 770));
+						primaryStage.show();
+					} catch (IOException ex) {
+						System.err.println(ex);
+					}
 				}
+
 			}
 		});
+
+//		renameAlbum.setOnAction(new EventHandler<ActionEvent>() {
+//    		@Override
+//    		public void handle(ActionEvent e) {
+//    			if (listView.getSelectionModel().isEmpty())
+//    				return;
+//    			String name = listView.getSelectionModel().getSelectedItem().toString();
+//    			createAlbum.fire();
+//    			albumTextField.setText(name);
+//    			rename = true;
+//    		}
+//    	});
 
 	}
 
