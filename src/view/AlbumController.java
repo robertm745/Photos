@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -47,33 +49,34 @@ public class AlbumController {
     @FXML private Text dateText;
     @FXML private Text captionLabel;
     @FXML private TextField CCMfield;
-    @FXML private TextField CCMvalue;
+    @FXML private ComboBox<Album> albumCB;
     
     private UserList userList;
     private User user;
     private Album album;
-    protected PhotoList photoList;
     private ObservableList<String> obsList;
     private int userIndex;
     private int albumIndex;
+    private boolean captionState;
+    private boolean copyState;
+    //private ObservableList<String> albumOptions;
 	
-    public void start(Stage newStage, Stage oldStage, Album album, User user, NonAdminController nac) {
+    public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac) {
     	userList = UserList.readList();
-    	this.album = album;
+    	this.album = al;
     	this.user = user;
     	this.userIndex = userList.getUserIndex(this.user);
     	this.albumIndex = userList.getList().get(this.userIndex).getAlbumList().getAlbumIndex(this.album);
-    	this.photoList = userList.getList().get(this.userIndex).getAlbumList().getAlbum(albumIndex).getPhotoList();
     	albumName.setText(album.toString());
 		newStage.setTitle("Album View");
-		obsList = FXCollections.observableArrayList(photoList.getPaths());
+		obsList = FXCollections.observableArrayList(this.album.getPaths());
 		photoListView.setItems(obsList);		
 		photoListView.setCellFactory(param -> new ListCell<String>() {
             private ImageView imageView = new ImageView();
             @Override
             public void updateItem(String path, boolean empty) {    
                 super.updateItem(path, empty);
-        		Photo p = photoList.getPhoto(path);
+        		Photo p = album.getPhoto(path);
                 if (empty) {
                     setText(null);
                     setGraphic(null);
@@ -122,10 +125,10 @@ public class AlbumController {
     		public void handle(ActionEvent e) {
     			int index = photoListView.getSelectionModel().getSelectedIndex();
     			if (index != -1) {
-    				Photo p = photoList.getPhoto(photoListView.getSelectionModel().getSelectedItem());
-        			photoList.deletePhoto(p);
+    				Photo p = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem());
+        			userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).deletePhoto(p);
         			saveData();
-        			if (index == photoList.getList().size())
+        			if (index == album.getPhotos().size())
         				index--;
         			photoListView.getSelectionModel().select(index);
         			updatePhotoListView();
@@ -141,12 +144,12 @@ public class AlbumController {
     			fileChooser.getExtensionFilters().addAll( new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
      			File file = fileChooser.showOpenDialog(new Stage());
     			if (file != null) {
-    				Photo p = new Photo(file.toURI().toString().substring(5), file.lastModified());
-    				photoList.addPhoto(p);
+    				Photo p = new Photo(file.getAbsolutePath(), file.lastModified());
+    				userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).addPhoto(p);
     				saveData();
-    				photoListView.getSelectionModel().select(p.toString());;
+    				photoListView.getSelectionModel().select(p.toString());
     				updatePhotoListView();
-    			}
+    			} 
     		}
     	});
     	
@@ -154,22 +157,17 @@ public class AlbumController {
     		@Override
     		public void handle(ActionEvent e) {
     			if (!photoListView.getSelectionModel().isEmpty()) {
+    				changeState();
+	    			captionState = true;
+    				copyPhoto.setVisible(false);
+    				movePhoto.setVisible(false);
 	    			newCaption.setDisable(true);
-	    			save.setVisible(true);
-	    			cancel.setVisible(true);
-	    			CCMfield.setVisible(true);
-	    			CCMfield.clear();
-	    			Photo p = photoList.getPhoto(photoListView.getSelectionModel().getSelectedItem());
+	    			Photo p = album.getPhoto(photoListView.getSelectionModel().getSelectedItem());
 	    			if (p.getCaption() != null)
 	    				CCMfield.setText(p.getCaption());
-	    			newTag.setVisible(false);
-	    			deleteTag.setVisible(false);
-	    			newPhoto.setVisible(false);
-	    			deletePhoto.setVisible(false);
-	    			copyPhoto.setVisible(false);
-	    			movePhoto.setVisible(false);
-	    			nextPhoto.setVisible(false);
-	    			prevPhoto.setVisible(false);
+	    			CCMfield.requestFocus();
+	    			CCMfield.setVisible(true);
+	    			save.setText("Save");
     			}
     		}
     	});
@@ -177,11 +175,15 @@ public class AlbumController {
     	cancel.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
+    			newCaption.setVisible(true);
     			newCaption.setDisable(false);
+    			copyPhoto.setVisible(true);
+    			copyPhoto.setDisable(false);
+    			movePhoto.setVisible(true);
+    			movePhoto.setDisable(false);
     			save.setVisible(false);
     			cancel.setVisible(false);
     			CCMfield.setVisible(false);
-    			CCMvalue.setVisible(false);
     			newTag.setVisible(true);
     			deleteTag.setVisible(true);
     			newPhoto.setVisible(true);
@@ -190,23 +192,41 @@ public class AlbumController {
     			movePhoto.setVisible(true);
     			nextPhoto.setVisible(true);
     			prevPhoto.setVisible(true);
+    			photoListView.setDisable(false);
+    			copyState = false;
+    			captionState = false;
+    			albumCB.setVisible(false);        			
+    			
     		}
     	});
     	
     	save.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
-    			String s = CCMfield.getText();
-    			if (s.length() > 30) {
-    				errorText.setVisible(true);
-    				errorText.setText("Error: Caption more than 30 chars");    				
+    			if (captionState) {
+        			String s = CCMfield.getText();
+        			if (s.length() > 30) {
+        				errorText.setVisible(true);
+        				errorText.setText("Error: Caption more than 30 chars");    				
+        			} else {
+    	    			userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).setCaption(s);
+    	    			saveData();
+    	    			cancel.fire();
+    	    			updatePhotoListView();
+    	    			photoListView.setDisable(false);
+        			}
     			} else {
-	    			photoList.getPhoto(photoListView.getSelectionModel().getSelectedItem()).setCaption(s);
-	    			saveData();
-	    			cancel.fire();
-	    			updatePhotoListView();
+    				if (albumCB.getSelectionModel().getSelectedIndex() != -1) {
+    					Album a = albumCB.getSelectionModel().getSelectedItem();
+    					int index = userList.getList().get(userIndex).getAlbumList().getAlbumIndex(a);
+    					Photo p = userList.getList().get(userIndex).getAlbumList().getList().get(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem());
+    					userList.getList().get(userIndex).getAlbumList().getAlbum(index).addPhoto(new Photo(p.toString(), p.getDateTime().getTimeInMillis(), p.getCaption()));
+        				if (!copyState) {
+        					deletePhoto.fire();
+        				}
+    				}
+    				cancel.fire();
     			}
-
     		}
     	});
     	
@@ -215,7 +235,7 @@ public class AlbumController {
     		public void handle(ActionEvent e) {
     			if (!photoListView.getSelectionModel().isEmpty()) {
         			int ind = photoListView.getSelectionModel().getSelectedIndex() + 1;
-        			if (ind == photoList.getList().size()) {
+        			if (ind == album.getPhotos().size()) {
         				ind = 0;
         			}
         			photoListView.getSelectionModel().select(ind);
@@ -229,38 +249,70 @@ public class AlbumController {
     			if (!photoListView.getSelectionModel().isEmpty()) {
         			int ind = photoListView.getSelectionModel().getSelectedIndex() - 1;
         			if (ind == -1) {
-        				ind = photoList.getList().size() - 1;
+        				ind = album.getPhotos().size() - 1;
         			}
         			photoListView.getSelectionModel().select(ind);
     			}
     		}
     	});
     	
+    	copyPhoto.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			if (!photoListView.getSelectionModel().isEmpty()) {
+        			copyState = true;
+        			changeState();
+        			copyPhoto.setDisable(true);
+        			movePhoto.setVisible(false);
+        			newCaption.setVisible(false);
+        			albumCB.setVisible(true);
+        			albumCB.setItems(FXCollections.observableArrayList(userList.getList().get(userIndex).getAlbumList().getList()));
+        			albumCB.getItems().remove(album);
+        			save.setText("Copy");
+    			}    			
+    		}
+    	});
+    	
+    	movePhoto.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			if (!photoListView.getSelectionModel().isEmpty()) {
+    				copyPhoto.fire();
+        			copyPhoto.setDisable(false);
+        			copyPhoto.setVisible(false);        	
+        			movePhoto.setVisible(true);
+        			movePhoto.setDisable(true);
+    				copyState = false;
+    				save.setText("Move");
+    			}    			
+    		}
+    	});
+    	
+    	
     }
     
     public void saveData() {
 		UserList.writeList(userList);
 		userList = UserList.readList();
-		this.photoList = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhotoList();
-		obsList = FXCollections.observableArrayList(this.photoList.getPaths());
+		this.album = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex);
+		obsList = FXCollections.observableArrayList(this.album.getPaths());
 		//obsList.sort((a,b) -> a.compareTo(b));
 		photoListView.setItems(obsList);
 		photoListView.requestFocus();
+		
     }
 
     public void updatePhotoListView() {
 		if (photoListView.getSelectionModel().getSelectedIndex() != -1) {
-			Photo ph = photoList.getPhoto(photoListView.getSelectionModel().getSelectedItem());
+			Photo ph = album.getPhoto(photoListView.getSelectionModel().getSelectedItem());
 			try {
 				imageView.setImage(new Image(new FileInputStream(ph.toString())));
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//imageView.setFitHeight(239);
-			//imageView.setFitWidth(413);
+			
 			dateText.setVisible(true);
-			dateText.setText(ph.getDateTime());
+			dateText.setText(ph.getDateTime().getTime().toString());
 			errorText.setVisible(false);
 			
 			if (ph.getCaption() != null && !ph.getCaption().isBlank()) {
@@ -279,5 +331,18 @@ public class AlbumController {
 			captionText.setVisible(false);
 			dateText.setVisible(false);
 		}
+		photoListView.requestFocus();
+    }
+    
+    public void changeState() {
+		newTag.setVisible(false);
+		deleteTag.setVisible(false);
+		newPhoto.setVisible(false);
+		deletePhoto.setVisible(false);
+		nextPhoto.setVisible(false);
+		prevPhoto.setVisible(false);
+		photoListView.setDisable(true);
+		save.setVisible(true);
+		cancel.setVisible(true);
     }
 }

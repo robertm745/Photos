@@ -20,6 +20,14 @@ public class Photo implements Serializable {
 		this.caption = "";
 	}
 	
+	public Photo(String path, long datetime, String caption) {
+		this.path = path;
+		this.datetime = Calendar.getInstance();
+		this.datetime.setTimeInMillis(datetime);
+		this.datetime.set(Calendar.MILLISECOND, 0);
+		this.caption = caption;
+	}
+	
 	public void setCaption (String value) {
 		this.caption = value;
 	}
@@ -28,15 +36,14 @@ public class Photo implements Serializable {
 		return this.caption;
 	}
 	
-	public String getDateTime() {
-		return this.datetime.getTime().toString();
+	public Calendar getDateTime() {
+		return this.datetime;
 	}
 	
 	public void setDateTime() {
 		File file = new File(this.path);
 		this.datetime.setTimeInMillis(file.lastModified());
 		this.datetime.set(Calendar.MILLISECOND, 0);
-		//System.out.println(this.datetime.getTime().toString() + " for file " + this.path);
 	}
 	
 	public String toString() {

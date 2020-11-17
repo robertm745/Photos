@@ -52,12 +52,11 @@ public class NonAdminController {
     	userIndex = userList.getUserIndex(user);
     	albums = userList.getList().get(userList.getUserIndex(user)).getAlbumList();
 		for (Album a : userList.getList().get(userIndex).getAlbumList().getList()) {
-			//System.out.println(a);
-			for (Photo p : a.getPhotoList().getList()) {
+			for (Photo p : a.getPhotos()) {
 				p.setDateTime();
 			}
-			//System.out.println();
 		}
+		
 		saveData();
 		
     	obsList = FXCollections.observableArrayList(albums.getList());
@@ -107,12 +106,16 @@ public class NonAdminController {
     			createAlbum.setVisible(false);
     			openAlbum.setVisible(false);
     			search.setVisible(false);
+    			dateRange.setVisible(false);
+    			numPics.setVisible(false);
     		}
     	});
     	
     	cancel.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
+    			dateRange.setVisible(true);
+    			numPics.setVisible(true);
     			albumTextField.setVisible(false); 
     			albumTextField.clear();
     			cancel.setVisible(false);
@@ -217,19 +220,19 @@ public class NonAdminController {
 		listView.requestFocus();
     }
     
-    public void readData() {
-    	userList = UserList.readList();
-    }
     
     public void updateListView() {
     	Album a = listView.getSelectionModel().getSelectedItem();
     	if (a != null ) {
     		numPics.setVisible(true);
     		numPics.setText(a.getSize() + "");
+    		dateRange.setVisible(true);
+    		dateRange.setText(a.getDateRange());
     	}
     	else {
     		numPics.setVisible(false);	
-    	}    		
+    		dateRange.setVisible(false);
+    	}
     	
     	
     }
