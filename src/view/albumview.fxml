@@ -46,5 +46,7 @@
       <TextField fx:id="CCMfield" layoutX="774.0" layoutY="537.0" promptText="Enter new caption" visible="false" />
       <ComboBox fx:id="albumCB" editable="false" layoutX="773.0" layoutY="573.0" prefWidth="150.0" promptText="Select Album" visible="false" />
       <ComboBox fx:id="tagCB" layoutX="773.0" layoutY="453.0" prefWidth="150.0" visible="false" />
+      <TextField fx:id="tagtypeField" layoutX="772.0" layoutY="496.0" promptText="Enter new tag type" visible="false" />
+      <TextField fx:id="tagvalueField" layoutX="772.0" layoutY="537.0" promptText="Enter tag value" visible="false" />
    </children>
 </Pane>

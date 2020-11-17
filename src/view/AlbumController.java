@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 import controller.Photos;
 import javafx.collections.FXCollections;
@@ -13,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -31,7 +33,7 @@ import javafx.stage.Stage;
 public class AlbumController {
 
     @FXML private ListView<String> photoListView;
-    @FXML private ListView<?> tagsListView;
+    @FXML private ListView<String> tagsListView;
     @FXML private ImageView imageView;
     @FXML private Button newCaption;
     @FXML private Button newPhoto;
@@ -52,6 +54,8 @@ public class AlbumController {
     @FXML private Text dateText;
     @FXML private Text captionLabel;
     @FXML private TextField CCMfield;
+    @FXML private TextField tagtypeField;
+    @FXML private TextField tagvalueField;
     @FXML private ComboBox<Album> albumCB;
     @FXML private ComboBox<String> tagCB;
     
@@ -59,10 +63,12 @@ public class AlbumController {
     private User user;
     private Album album;
     private ObservableList<String> obsList;
+    private ObservableList<String> tagobsList;
     private int userIndex;
     private int albumIndex;
     private boolean captionState;
     private boolean copyState;
+    private boolean tagState;
 	
     public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac) {
     	userList = UserList.readList();
@@ -200,7 +206,11 @@ public class AlbumController {
     			captionState = false;
     			albumCB.setVisible(false);     
     			tagCB.setVisible(false);
-    			
+    			tagtypeField.setVisible(false);
+    			tagvalueField.setVisible(false);
+    			tagtypeField.clear();
+    			tagvalueField.clear();
+
     		}
     	});
     	
@@ -219,7 +229,38 @@ public class AlbumController {
     	    			updatePhotoListView();
     	    			photoListView.setDisable(false);
         			}
-    			} else {
+    			} else if (tagState) {
+    				if (tagCB.getSelectionModel().getSelectedItem().equals("Create new tag")) {
+    					if(tagtypeField.getText().strip().isEmpty() || tagvalueField.getText().strip().isEmpty()) {
+    						errorText.setVisible(true);
+            				errorText.setText("Error: please enter tag type and value");
+    					} else {
+    						user.addTag(tagtypeField.getText());
+        					album.getPhoto(photoListView.getSelectionModel().getSelectedItem()).addTag(tagtypeField.getText(), tagvalueField.getText());
+        					saveData();
+        	    			cancel.fire();
+        	    			updatePhotoListView();
+        	    			photoListView.setDisable(false);
+        	    			tagState = false;
+    					}			
+    					    					
+    				} else {    	
+    					if (tagvalueField.getText().strip().isEmpty()) {
+    						errorText.setVisible(true);
+            				errorText.setText("Error: please enter tag value");
+    					} else {
+    						album.getPhoto(photoListView.getSelectionModel().getSelectedItem()).addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
+        					saveData();
+        	    			cancel.fire();
+        	    			updatePhotoListView();
+        	    			photoListView.setDisable(false);
+        	    			tagState = false;
+    					}
+    					
+    				}
+    			}
+    				else {
+    			
     				if (albumCB.getSelectionModel().getSelectedIndex() != -1) {
     					Album a = albumCB.getSelectionModel().getSelectedItem();
     					int index = userList.getList().get(userIndex).getAlbumList().getAlbumIndex(a);
@@ -295,13 +336,16 @@ public class AlbumController {
     	newTag.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
+    			tagState = true;
     			changeState();
     			newCaption.setVisible(false);
 				copyPhoto.setVisible(false);
 				movePhoto.setVisible(false);
     			newCaption.setDisable(true); 
-    			tagCB.setVisible(true);    	
+    			tagCB.setVisible(true);   
+    			
     			tagCB.getSelectionModel().clearSelection();
+    			//tagCB.getItems().clear();
 
     			tagCB.setPromptText("Select tag type");
     			
@@ -310,17 +354,37 @@ public class AlbumController {
     			list.addAll(user.getTags());
     			
     			tagCB.setItems(list);
-    			
-    			tagCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-    				System.out.println("Tag Name: " + newValue);
-    			});
-    			
- 
-    			
 
     		}
     	});
     	
+    	deleteTag.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent e) {
+    			int index = tagsListView.getSelectionModel().getSelectedIndex();
+    			if (index != -1) {
+    				Photo p = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem());
+        			p.removeTag(tagsListView.getSelectionModel().getSelectedItem());
+        			saveData();
+        			if (index == p.getTagsList().size())
+        				index--;
+        			tagsListView.getSelectionModel().select(index);
+        			updatePhotoListView();
+    			}
+    		}
+    	});
+    	
+    	  tagCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+    		  if (tagCB.getSelectionModel().getSelectedItem() != null) {
+  				if (tagCB.getSelectionModel().getSelectedItem().equals("Create new tag")) {
+      				tagvalueField.setVisible(true);
+      				tagtypeField.setVisible(true);
+      			} else {
+      				tagtypeField.setVisible(false);
+      				tagvalueField.setVisible(true);
+      			}
+  			}
+          });
     	
     }
     
@@ -347,6 +411,9 @@ public class AlbumController {
 			dateText.setVisible(true);
 			dateText.setText(ph.getDateTime().getTime().toString());
 			errorText.setVisible(false);
+			
+			tagobsList = FXCollections.observableArrayList(album.getPhoto(photoListView.getSelectionModel().getSelectedItem()).getTagsList());
+			tagsListView.setItems(tagobsList);
 			
 			if (ph.getCaption() != null && !ph.getCaption().isBlank()) {
 				captionLabel.setVisible(true);
