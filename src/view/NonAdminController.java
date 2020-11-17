@@ -48,6 +48,7 @@ public class NonAdminController {
 	private Button save;
 
 //	private AlbumList albums;
+	private UserList userlist;
 	private User user;
 	private String mode = "";
 	private ObservableList<Album> obsList;
@@ -71,6 +72,7 @@ public class NonAdminController {
 
 					// Get controller of scene2
 					LoginController loginController = loader.getController();
+					loginController.transferMessage(userlist);
 					loginController.start(primaryStage);
 					primaryStage.setScene(new Scene(root, 990, 770));
 					primaryStage.setTitle("Photos login");
@@ -107,7 +109,7 @@ public class NonAdminController {
 				if (mode.equals("create")) {
 					if (!albumTextField.getText().strip().isEmpty()) {
 						Album newAlbum = new Album(albumTextField.getText());
-						if (user.contains(albumTextField.getText())) {
+						if (user.contains(newAlbum)) {
 							errorText.setFill(Color.RED);
 							errorText.setText("Error: Duplicate!");
 						} else {
@@ -176,6 +178,7 @@ public class NonAdminController {
 
 					// Get controller of scene2
 					AlbumController albumController = loader.getController();
+					albumController.transferMessage(userlist, user, listView.getSelectionModel().getSelectedItem());
 					albumController.start(primaryStage);
 					primaryStage.setScene(new Scene(root, 990, 770));
 					primaryStage.setTitle("Album");
@@ -202,8 +205,9 @@ public class NonAdminController {
 		listView.requestFocus();
 	}
 
-	public void transferMessage(User user) {
+	public void transferMessage(UserList userlist, User user) {
 		// Display the message
+		this.userlist = userlist;
 		this.user = user;
 	}
 }

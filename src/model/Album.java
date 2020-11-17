@@ -14,6 +14,7 @@ public class Album implements Serializable{
 	public Album(String name) {
 		// TODO Auto-generated constructor stub
 		this.name = name;
+		photos = new ArrayList<Photo>();
 	}
 	
 	public ArrayList<Photo> getPhotos(){
@@ -22,6 +23,10 @@ public class Album implements Serializable{
 	
 	public void addPhoto(Photo photo) {
 		this.photos.add(photo);
+	}
+	
+	public void deletePhoto(Photo photo) {
+		this.photos.remove(photo);
 	}
 	
 	public String getName() {

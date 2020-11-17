@@ -19,12 +19,16 @@ public class Photos extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		UserList userlist = UserList.readList();
+		
 		// TODO Auto-generated method stub
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/view/Login.fxml"));
 		Pane root = (Pane) loader.load();
 
 		LoginController loginController = loader.getController();
+		loginController.transferMessage(userlist);
 		loginController.start(primaryStage);
 
 		Scene scene = new Scene(root, 990, 770);

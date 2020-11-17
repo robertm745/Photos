@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,11 +15,11 @@ public class Photo implements Serializable{
 	private HashMap<String, ArrayList<String>> tags;
 	private String caption;
 
-	public Photo(String location) {
+	public Photo(File file) {
 		// TODO Auto-generated constructor stub
-		this.location = location;
+		this.location = file.getAbsolutePath();
 		this.tags = new HashMap<>();
-		this.location = location;
+		caption = file.getName();
 	}
 
 	public void addTag(String key, String value) {
@@ -39,6 +40,10 @@ public class Photo implements Serializable{
 
 	public String getLocation() {
 		return location;
+	}
+	
+	public String toString() {
+		return this.caption;
 	}
 
 }

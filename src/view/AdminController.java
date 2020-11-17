@@ -34,16 +34,11 @@ public class AdminController {
 	private Text statusText;
 
 	private ObservableList<User> obsList;
-	private UserList list;
+	private UserList userlist;
 
 	public void start(Stage primaryStage) {
-    	try {
-			list = UserList.readList();
-		} catch (ClassNotFoundException | IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-    	obsList = FXCollections.observableArrayList(list.getUsers());
+    	
+    	obsList = FXCollections.observableArrayList(userlist.getUsers());
 		listView.setItems(obsList);
 		listView.getSelectionModel().select(0);
 		listView.requestFocus();
@@ -60,6 +55,7 @@ public class AdminController {
     	             
     	            //Get controller of scene2
     	            LoginController loginController = loader.getController();  
+    	            loginController.transferMessage(userlist);
     	            loginController.start(primaryStage);
     	            primaryStage.setScene(new Scene(root, 990, 770));
     	            primaryStage.setTitle("Photos login");
@@ -78,9 +74,9 @@ public class AdminController {
     				User u = listView.getSelectionModel().getSelectedItem();
 					int index = listView.getSelectionModel().getSelectedIndex();
 					
-						list.removeUser(u);
+					userlist.removeUser(u);
 						saveData();
-						if (list.getList().size() == index)
+						if (userlist.getUsers().size() == index)
 							index--;
 						listView.getSelectionModel().select(index);
     			}
@@ -93,8 +89,8 @@ public class AdminController {
     		public void handle(ActionEvent e) {
     			if (!newUserTextField.getText().isBlank()) {
     				User u = new User(newUserTextField.getText());
-    				if (!list.contains(u)) {
-    					list.addUser(u);
+    				if (!userlist.contains(u)) {
+    					userlist.addUser(u);
     					saveData();
     					listView.getSelectionModel().select(u);
     					listView.requestFocus();
@@ -114,13 +110,13 @@ public class AdminController {
 	
 	public void saveData() {
 		try {
-			UserList.write(list);
+			UserList.write(userlist);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
-			list = UserList.readList();
+			userlist = UserList.readList();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,12 +124,18 @@ public class AdminController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		obsList = FXCollections.observableArrayList(list.getList());
+		obsList = FXCollections.observableArrayList(userlist.getUsers());
 		listView.setItems(obsList);
 		listView.getSelectionModel().select(0);
 		listView.requestFocus();
 		statusText.setVisible(false);
 		newUserTextField.clear();
     }
+	
+	
+	public void transferMessage(UserList userlist) {
+		// Display the message
+		this.userlist = userlist;
+	}
 
 }

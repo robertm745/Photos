@@ -33,8 +33,8 @@ public class User implements Serializable {
 		return albums;
 	}
 
-	public boolean contains(String album) {
-		if (this.albums.contains(new Album(album))) return true;
+	public boolean contains(Album album) {
+		if (this.albums.contains(album)) return true;
 		else return false;
 	}
 	

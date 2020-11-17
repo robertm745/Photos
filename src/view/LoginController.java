@@ -23,6 +23,8 @@ public class LoginController {
 	private TextField username;
 	@FXML
 	private Text statusText;
+	
+	UserList userlist;
 
 	public void start(Stage primaryStage) {
 		// TODO Auto-generated method stub
@@ -32,30 +34,27 @@ public class LoginController {
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				if (username.getText().equalsIgnoreCase("admin")) {
-					// Load second scene
-					FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/admin.fxml"));
-					Parent root;
-
 					try {
-						root = loader.load();
+						// Load second scene
+						FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/admin.fxml"));
+						Parent root = loader.load();
+
 						// Get controller of scene2
 						AdminController adminController = loader.getController();
+						adminController.transferMessage(userlist);
 						adminController.start(primaryStage);
-						// Show scene 2 in new window
 						primaryStage.setScene(new Scene(root, 990, 770));
-						primaryStage.setTitle("Admin");
+						primaryStage.setTitle("Admin system");
 						primaryStage.show();
-
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (IOException ex) {
+						ex.printStackTrace();
 					}
-					
+
 				}
 
 				else {
 					try {
-						User user = new User(username.getText());
+						User user = userlist.getUser(username.getText());
 						if (username.getText().isBlank()) {
 							statusText.setFill(Color.RED);
 							statusText.setText("Please enter username");
@@ -66,19 +65,18 @@ public class LoginController {
 							FXMLLoader loader = new FXMLLoader();
 							loader.setLocation(getClass().getResource("/view/non_admin.fxml"));
 							Parent root;
-							
-							
+
 							root = loader.load();
 							// Get controller of scene2
 							NonAdminController nonAdminController = loader.getController();
-							nonAdminController.transferMessage(user);
+							nonAdminController.transferMessage(userlist, user);
 							nonAdminController.start(primaryStage);
 							// Show scene 2 in new window
 							primaryStage.setScene(new Scene(root, 990, 770));
 							primaryStage.setTitle("Non admin");
 							primaryStage.show();
 
-					}
+						}
 
 					} catch (IOException e1) {
 						e1.printStackTrace();
@@ -92,6 +90,11 @@ public class LoginController {
 
 		});
 
+	}
+	
+	public void transferMessage(UserList userlist) {
+		// Display the message
+		this.userlist = userlist;
 	}
 
 }

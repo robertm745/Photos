@@ -26,10 +26,6 @@ public class UserList implements Serializable {
 		this.users = new ArrayList<User>();
 	}
 
-	public ArrayList<User> getList() {
-		return users;
-	}
-
 	public void addUser(User user) {
 		users.add(user);
 	}
@@ -49,6 +45,15 @@ public class UserList implements Serializable {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
 		oos.writeObject(userlist);
 		oos.close();
+	}
+	
+	public User getUser(String username) {
+		for (User user : users) {
+			if (user.getUsername().equals(username))
+				return user;
+		}
+		
+		return new User("null");
 	}
 
 	public boolean contains(User user) {

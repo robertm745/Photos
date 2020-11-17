@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="987.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AlbumController">
+   <children>
+      <ListView fx:id="photoListView" layoutX="58.0" layoutY="63.0" prefHeight="567.0" prefWidth="390.0" />
+      <ListView fx:id="tagsListView" layoutX="519.0" layoutY="423.0" prefHeight="126.0" prefWidth="164.0" />
+      <ImageView fx:id="imageView" fitHeight="239.0" fitWidth="413.0" layoutX="559.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Photos32_backup/src/view/search_for_tags.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="newCaption" layoutX="806.0" layoutY="411.0" mnemonicParsing="false" text="Edit Caption" />
+      <Button fx:id="newPhoto" layoutX="537.0" layoutY="643.0" mnemonicParsing="false" text="Add New Photo" />
+      <Button fx:id="deletePhoto" layoutX="520.0" layoutY="693.0" mnemonicParsing="false" text="Delete Selected Photo" />
+      <Button fx:id="nextPhoto" layoutX="288.0" layoutY="673.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Next Photo" />
+      <Button fx:id="prevPhoto" layoutX="93.0" layoutY="673.0" mnemonicParsing="false" text="Previous Photo" />
+      <Button fx:id="newTag" layoutX="482.0" layoutY="579.0" mnemonicParsing="false" text="Add New Tag" />
+      <Button fx:id="deleteTag" layoutX="591.0" layoutY="579.0" mnemonicParsing="false" text="Delete Selected Tag" />
+      <Button fx:id="copyPhoto" layoutX="766.0" layoutY="453.0" mnemonicParsing="false" text="Copy Photo to Other Album" />
+      <Button fx:id="movePhoto" layoutX="781.0" layoutY="496.0" mnemonicParsing="false" text="Move to Other Album" />
+      <Button fx:id="save" layoutX="758.0" layoutY="631.0" mnemonicParsing="false" text="Save" visible="false" />
+      <Button fx:id="cancel" layoutX="882.0" layoutY="631.0" mnemonicParsing="false" text="Cancel" visible="false" />
+      <Button fx:id="backToAlbums" layoutX="67.0" layoutY="22.0" mnemonicParsing="false" text="Back to Albums List" />
+      <Button fx:id="logout" layoutX="913.0" layoutY="22.0" mnemonicParsing="false" text="Logout" />
+      <Text layoutX="587.0" layoutY="407.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tags:" />
+      <Text fx:id="albumName" layoutX="441.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Album Name">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="captionLabel" layoutX="559.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Caption:" visible="false" />
+      <Text fx:id="errorText" layoutX="775.0" layoutY="702.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error: Album does not exist" visible="false" />
+      <Text layoutX="560.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date Taken:" />
+      <Text fx:id="captionText" layoutX="663.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="photo caption" visible="false" />
+      <Text fx:id="dateText" layoutX="663.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="data photo taken" />
+      <TextField fx:id="CCMvalue" layoutX="774.0" layoutY="573.0" prefHeight="25.0" prefWidth="149.0" promptText="caption/move/copy value" visible="false" />
+      <TextField fx:id="CCMfield" layoutX="774.0" layoutY="537.0" promptText="Enter new caption" visible="false" />
+   </children>
+</Pane>
