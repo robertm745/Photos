@@ -330,24 +330,26 @@ public class AlbumController {
     	newTag.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
-    			tagState = true;
-    			changeState();
-    			newCaption.setVisible(false);
-				copyPhoto.setVisible(false);
-				movePhoto.setVisible(false);
-    			newCaption.setDisable(true); 
-    			tagCB.setVisible(true);   
-    			
-    			tagCB.getSelectionModel().clearSelection();
-    			//tagCB.getItems().clear();
-    			save.setText("Add");
-    			tagCB.setPromptText("Select tag type");
-    			
-    			ObservableList<String> list = FXCollections.observableArrayList();
-    			list.add("Create new tag");
-    			list.addAll(user.getTags());
-    			
-    			tagCB.setItems(list);
+    			if (!photoListView.getSelectionModel().isEmpty()) {
+        			tagState = true;
+        			changeState();
+        			newCaption.setVisible(false);
+    				copyPhoto.setVisible(false);
+    				movePhoto.setVisible(false);
+        			newCaption.setDisable(true); 
+        			tagCB.setVisible(true);   
+        			
+        			tagCB.getSelectionModel().clearSelection();
+        			//tagCB.getItems().clear();
+        			save.setText("Add");
+        			tagCB.setPromptText("Select tag type");
+        			
+        			ObservableList<String> list = FXCollections.observableArrayList();
+        			list.add("Create new tag");
+        			list.addAll(user.getTags());
+        			
+        			tagCB.setItems(list);
+    			}
 
     		}
     	});
@@ -421,7 +423,6 @@ public class AlbumController {
 			}					
 		} 
 		else {
-			System.out.println(index + " is index");
 			imageView.setImage(null);
 			captionLabel.setVisible(false);
 			captionText.setVisible(false);
