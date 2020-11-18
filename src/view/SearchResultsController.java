@@ -56,8 +56,6 @@ public class SearchResultsController {
 	
     public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac, SearchController sc) {
     	userList = UserList.readList();
-    	this.album = al;
-    	this.user = user;
     	this.userIndex = userList.getUserIndex(this.user);
 		newStage.setTitle("Album View");
 		obsList = FXCollections.observableArrayList(this.album.getPaths());

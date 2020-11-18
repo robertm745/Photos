@@ -21,15 +21,27 @@ public class Photo implements Serializable {
 		this.datetime.setTimeInMillis(datetime);
 		this.datetime.set(Calendar.MILLISECOND, 0);
 		this.caption = "";
-		tags = new HashMap<String, ArrayList<String>>();
+		this.tags = new HashMap<String, ArrayList<String>>();
 	}
 	
+	/*
 	public Photo(String path, long datetime, String caption) {
 		this.path = path;
 		this.datetime = Calendar.getInstance();
 		this.datetime.setTimeInMillis(datetime);
 		this.datetime.set(Calendar.MILLISECOND, 0);
 		this.caption = caption;
+		this.tags = new HashMap<String, ArrayList<String>>();
+	}
+	*/
+	
+	public Photo(String path, long datetime, String caption, HashMap<String, ArrayList<String>> tags ) {
+		this.path = path;
+		this.datetime = Calendar.getInstance();
+		this.datetime.setTimeInMillis(datetime);
+		this.datetime.set(Calendar.MILLISECOND, 0);
+		this.caption = caption;
+		this.tags = tags;
 	}
 	
 	public void setCaption (String value) {
@@ -48,6 +60,10 @@ public class Photo implements Serializable {
 		File file = new File(this.path);
 		this.datetime.setTimeInMillis(file.lastModified());
 		this.datetime.set(Calendar.MILLISECOND, 0);
+	}
+	
+	public HashMap<String, ArrayList<String>> getTags() {
+		return this.tags;
 	}
 	
 	public void addTag(String key, String value) {

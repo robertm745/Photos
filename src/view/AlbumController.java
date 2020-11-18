@@ -255,7 +255,7 @@ public class AlbumController {
 	    					Album a = albumCB.getSelectionModel().getSelectedItem();
 	    					int index = userList.getList().get(userIndex).getAlbumList().getAlbumIndex(a);
 	    					Photo p = userList.getList().get(userIndex).getAlbumList().getList().get(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem());
-	    					userList.getList().get(userIndex).getAlbumList().getAlbum(index).addPhoto(new Photo(p.toString(), p.getDateTime().getTimeInMillis(), p.getCaption()));
+	    					userList.getList().get(userIndex).getAlbumList().getAlbum(index).addPhoto(new Photo(p.toString(), p.getDateTime().getTimeInMillis(), p.getCaption(), p.getTags()));
 	        				if (!copyState) {
 	        					deletePhoto.fire();
 	        				}
