@@ -40,13 +40,18 @@ public class Album implements Serializable {
 		this.setDateRange();
 	}
 	
-	public Photo getPhoto(String path) {
+	/*
+	public Photo getPhoto(Photo photo) {
 		for (Photo p : photos) {
-			if (p.toString().equals(path))
+			System.out.println(p + " is this and param is " + photo);
+			if (p.equals(photo)) {
+				System.out.println(true);
 				return p;
+			}
 		}
 		return null;
 	}
+	*/
 	
 	public void rename(String name) {
 		this.name = name;

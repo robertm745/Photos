@@ -31,7 +31,7 @@ public class SearchResultsController {
 
 
 
-    @FXML private ListView<String> photoListView;
+    @FXML private ListView<Photo> photoListView;
     @FXML private ListView<String> tagsListView;
     @FXML private ImageView imageView;
     @FXML private Button save;
@@ -50,28 +50,24 @@ public class SearchResultsController {
     private UserList userList;
     private User user;
     private Album album;
-    private ObservableList<String> obsList;
+    private ObservableList<Photo> obsList;
     private ObservableList<String> tagobsList;
     private int userIndex;
 	
-    public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac, SearchController sc) {
+    public void start(Stage newStage, Stage oldStage, Album al, User u, NonAdminController nac, SearchController sc) {
     	userList = UserList.readList();
-    	this.userIndex = userList.getUserIndex(this.user);
+    	this.userIndex = userList.getUserIndex(u);
+    	this.user = userList.getList().get(userIndex);
     	this.album = al;
 		newStage.setTitle("Album View");
-		obsList = FXCollections.observableArrayList(this.album.getPaths());
-		obsList.sort((a,b) -> {
-			Photo p1 = album.getPhoto(a);
-			Photo p2 = album.getPhoto(b);
-			return p1.compareTo(p2);
-		});
+		obsList = FXCollections.observableArrayList(this.album.getPhotos());
+		obsList.sort((a,b) -> a.compareTo(b));
 		photoListView.setItems(obsList);		
-		photoListView.setCellFactory(param -> new ListCell<String>() {
+		photoListView.setCellFactory(param -> new ListCell<Photo>() {
             private ImageView imageView = new ImageView();
             @Override
-            public void updateItem(String path, boolean empty) {    
-                super.updateItem(path, empty);
-        		Photo p = album.getPhoto(path);
+            public void updateItem(Photo p, boolean empty) {    
+                super.updateItem(p, empty);
                 if (empty) {
                     setText(null);
                     setGraphic(null);
@@ -145,8 +141,8 @@ public class SearchResultsController {
     	save.setOnAction(e -> {
 	    	if (!albumField.getText().isBlank()) {
 				al.rename(albumField.getText());
-				if (!userList.getList().get(userIndex).getAlbumList().getList().contains(al)) {
-					userList.getList().get(userIndex).getAlbumList().addAlbum(al);
+				if (!user.getAlbumList().getList().contains(al)) {
+					user.getAlbumList().addAlbum(al);
 					saveData();
 					cancel.fire();
 				} else {
@@ -167,12 +163,8 @@ public class SearchResultsController {
     public void saveData() {
 		UserList.writeList(userList);
 		userList = UserList.readList();
-		obsList = FXCollections.observableArrayList(this.album.getPaths());
-		obsList.sort((a,b) -> {
-			Photo p1 = album.getPhoto(a);
-			Photo p2 = album.getPhoto(b);
-			return p1.compareTo(p2);
-		});
+		obsList = FXCollections.observableArrayList(this.album.getPhotos());
+		obsList.sort((a,b) -> a.compareTo(b));
 		photoListView.setItems(obsList);
 		photoListView.requestFocus();
 		
@@ -180,7 +172,7 @@ public class SearchResultsController {
 
     public void updatePhotoListView() {
 		if (photoListView.getSelectionModel().getSelectedIndex() != -1) {
-			Photo ph = album.getPhoto(photoListView.getSelectionModel().getSelectedItem());
+			Photo ph = photoListView.getSelectionModel().getSelectedItem();
 			try {
 				imageView.setImage(new Image(new FileInputStream(ph.toString())));
 			} catch (FileNotFoundException e) {
@@ -191,7 +183,7 @@ public class SearchResultsController {
 			dateText.setText(ph.getDateTime().getTime().toString());
 			errorText.setVisible(false);
 			
-			tagobsList = FXCollections.observableArrayList(album.getPhoto(photoListView.getSelectionModel().getSelectedItem()).getTagsList());
+			tagobsList = FXCollections.observableArrayList(photoListView.getSelectionModel().getSelectedItem().getTagsList());
 			tagsListView.setItems(tagobsList);
 			
 			if (!ph.getCaption().isBlank()) {

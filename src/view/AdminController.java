@@ -15,6 +15,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+/**
+ * @author robert
+ *
+ */
 public class AdminController {
 
     @FXML private ListView<User> listView;
@@ -27,6 +31,10 @@ public class AdminController {
     private ObservableList<User> obsList;
     private UserList list;
 
+    /**
+     * @param newStage
+     * @throws Exception
+     */
     public void start(Stage newStage) throws Exception {
 		newStage.setTitle("Admin");
     	list = UserList.readList();

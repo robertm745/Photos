@@ -51,12 +51,14 @@ public class SearchController {
 	private Text errorText;
 
 	protected UserList userList;
+	private User us;
 	private int userIndex;
 
-	public void start(Stage newStage, Stage oldStage, User user, NonAdminController nac) {
+	public void start(Stage newStage, Stage oldStage, User u, NonAdminController nac) {
 
 		this.userList = UserList.readList();
-		userList.getUserIndex(user);
+		this.userIndex = userList.getUserIndex(u);
+		this.us = userList.getList().get(userIndex);
 
 		logout.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -139,8 +141,9 @@ public class SearchController {
 					String[] tagTwoValues;
 
 					if (singleRadio.isSelected()) {
-						for (Album album : userList.getList().get(userIndex).getAlbumList().getList()) {
+						for (Album album : us.getAlbumList().getList()) {
 							for (Photo photo : album.getPhotos()) {
+								//System.out.println("tag input values: " + tagOneValues[0] + "|" + tagOneValues[1] + " and this photo tag is " + photo.getTags().get("person"));
 								if (photo.getTagsList().contains(tagOneValues[0] + "|" + tagOneValues[1])) {
 									temp.addPhoto(photo);
 								}
@@ -152,7 +155,7 @@ public class SearchController {
 						tagTwo = tagFieldTwo.getText();
 						tagTwoValues = tagTwo.split("=");
 
-						for (Album album : userList.getList().get(userIndex).getAlbumList().getList()) {
+						for (Album album : us.getAlbumList().getList()) {
 							for (Photo photo : album.getPhotos()) {
 
 								if (andRadio.isSelected()) {
@@ -181,7 +184,7 @@ public class SearchController {
 						root = (Pane) loader.load();
 						SearchResultsController sc = loader.getController();
 						Stage stage = new Stage();
-						sc.start(stage, newStage, temp, user, nac, this);
+						sc.start(stage, newStage, temp, us, nac, this);
 						stage.setScene(new Scene(root, 987, 770));
 						stage.setResizable(false);
 						stage.show();
@@ -225,7 +228,7 @@ public class SearchController {
 						root = (Pane) loader.load();
 						SearchResultsController sc = loader.getController();
 						Stage stage = new Stage();
-						sc.start(stage, newStage, temp, user, nac, this);
+						sc.start(stage, newStage, temp, us, nac, this);
 						stage.setScene(new Scene(root, 987, 770));
 						stage.setResizable(false);
 						stage.show();
