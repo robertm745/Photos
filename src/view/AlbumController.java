@@ -153,11 +153,7 @@ public class AlbumController {
     				album.getPhotos().sort((a,b) -> a.compareTo(b));
     				int index = album.getPhotos().indexOf(p);
     				saveData();
-    				//user.getAlbumList().getAlbum(albumIndex).getPhotos().indexOf(p);
-    				//photoListView.getSelectionModel().select(p);
-    				//int index = album.getPhotos().indexOf(p);
-    				System.out.println(index + " is index");
-    				updatePhotoListView(index   /*user.getAlbumList().getAlbum(albumIndex).getPhotos().indexOf(p)photoListView.getSelectionModel().getSelectedIndex()*/);
+    				updatePhotoListView(index);
     			} 
     		}
     	});
