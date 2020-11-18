@@ -151,8 +151,11 @@ public class AlbumController {
     				Photo p = new Photo(file.getAbsolutePath(), file.lastModified());
     				album.addPhoto(p);
     				saveData();
-    				photoListView.getSelectionModel().select(p);
-    				updatePhotoListView(photoListView.getSelectionModel().getSelectedIndex());
+    				//user.getAlbumList().getAlbum(albumIndex).getPhotos().indexOf(p);
+    				//photoListView.getSelectionModel().select(p);
+    				int index = obsList.indexOf(p);
+    				System.out.println(index + " is index");
+    				updatePhotoListView(index   /*user.getAlbumList().getAlbum(albumIndex).getPhotos().indexOf(p)photoListView.getSelectionModel().getSelectedIndex()*/);
     			} 
     		}
     	});
@@ -202,6 +205,7 @@ public class AlbumController {
     			tagvalueField.setVisible(false);
     			tagtypeField.clear();
     			tagvalueField.clear();
+    			errorText.setVisible(false);
 
     		}
     	});
@@ -224,36 +228,42 @@ public class AlbumController {
         			}
     			} else if (tagState) {
 					int index = photoListView.getSelectionModel().getSelectedIndex();
-    				if (tagCB.getSelectionModel().getSelectedItem().equals("Create new tag")) {
-    					if(tagtypeField.getText().strip().isEmpty() || tagvalueField.getText().strip().isEmpty()) {
-    						errorText.setVisible(true);
-            				errorText.setText("Error: please enter tag type and value");
-    					} else {
-							if (!user.getTags().contains(tagtypeField.getText())) {
-							      user.addTag(tagtypeField.getText());
-							}
-    						photoListView.getSelectionModel().getSelectedItem().addTag(tagtypeField.getText(), tagvalueField.getText());
-        					saveData();
-        	    			cancel.fire();
-        	    			updatePhotoListView(index);
-        	    			photoListView.setDisable(false);
-        	    			tagState = false;
-    					}			
-    					    					
-    				} else {    	
-    					if (tagvalueField.getText().strip().isEmpty()) {
-    						errorText.setVisible(true);
-            				errorText.setText("Error: please enter tag value");
-    					} else {
-    						photoListView.getSelectionModel().getSelectedItem().addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
-        					saveData();
-        	    			cancel.fire();
-        	    			updatePhotoListView(index);
-        	    			photoListView.setDisable(false);
-        	    			tagState = false;
-    					}
-    					
-    				}
+					int tagIndex = tagCB.getSelectionModel().getSelectedIndex();
+					if (tagIndex == -1) {
+						errorText.setVisible(true);
+        				errorText.setText("Error: please select a tag type");
+					} 
+					else {
+	    				if (tagCB.getSelectionModel().getSelectedItem().equals("Create new tag")) {
+	    					if(tagtypeField.getText().strip().isEmpty() || tagvalueField.getText().strip().isEmpty()) {
+	    						errorText.setVisible(true);
+	            				errorText.setText("Error: please enter tag type and value");
+	    					} else {
+								if (!user.getTags().contains(tagtypeField.getText())) {
+								      user.addTag(tagtypeField.getText());
+								}
+	    						photoListView.getSelectionModel().getSelectedItem().addTag(tagtypeField.getText(), tagvalueField.getText());
+	        					saveData();
+	        	    			cancel.fire();
+	        	    			updatePhotoListView(index);
+	        	    			photoListView.setDisable(false);
+	        	    			tagState = false;
+	    					}			
+	    					    					
+	    				} else {    	
+	    					if (tagvalueField.getText().strip().isEmpty() || index == -1) {
+	    						errorText.setVisible(true);
+	            				errorText.setText("Error: please enter tag value");
+	    					} else {
+	    						photoListView.getSelectionModel().getSelectedItem().addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
+	        					saveData();
+	        	    			cancel.fire();
+	        	    			updatePhotoListView(index);
+	        	    			photoListView.setDisable(false);
+	        	    			tagState = false;
+	    					}	    					
+	    				}
+					}
     			}
     				else {    			
 	    				if (albumCB.getSelectionModel().getSelectedIndex() != -1) {
@@ -441,5 +451,6 @@ public class AlbumController {
 		photoListView.setDisable(true);
 		save.setVisible(true);
 		cancel.setVisible(true);
+		errorText.setVisible(false);
     }
 }
