@@ -53,14 +53,12 @@ public class SearchResultsController {
     private ObservableList<String> obsList;
     private ObservableList<String> tagobsList;
     private int userIndex;
-    private int albumIndex;
 	
-    public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac) {
+    public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac, SearchController sc) {
     	userList = UserList.readList();
     	this.album = al;
     	this.user = user;
     	this.userIndex = userList.getUserIndex(this.user);
-    	this.albumIndex = userList.getList().get(this.userIndex).getAlbumList().getAlbumIndex(this.album);
 		newStage.setTitle("Album View");
 		obsList = FXCollections.observableArrayList(this.album.getPaths());
 		photoListView.setItems(obsList);		
@@ -85,6 +83,8 @@ public class SearchResultsController {
             }
         });
 		
+
+		
     	photoListView.getSelectionModel().select(0);
     	updatePhotoListView();
     	
@@ -100,6 +100,13 @@ public class SearchResultsController {
     		oldStage.show();
     	});
     	
+    	backToAlbums.setOnAction(e -> {
+    			newStage.close();
+    			sc.userList = this.userList;
+    			sc.backToAlbums.fire();
+    		}    			
+    	);
+    	
     	logout.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent e) {
@@ -113,23 +120,39 @@ public class SearchResultsController {
     		}
     	});
     	
+    	newAlbum.setOnAction(e -> {
+    			save.setVisible(true);
+    			cancel.setVisible(true);
+    			albumField.setVisible(true);
+    			photoListView.setDisable(true);
+    			
+    		}    			
+    	);
+    	
 
-    	cancel.setOnAction(new EventHandler<ActionEvent>() {
-    		@Override
-    		public void handle(ActionEvent e) {
-    			save.setVisible(false);
-    			cancel.setVisible(false);
-    			photoListView.setDisable(false);
-
-    		}
+    	cancel.setOnAction(e -> {
+			save.setVisible(false);
+			cancel.setVisible(false);
+			albumField.setVisible(false);
+			photoListView.setDisable(false);
+			errorText.setVisible(false);
     	});
     	
-    	save.setOnAction(new EventHandler<ActionEvent>() {
-    		@Override
-    		public void handle(ActionEvent e) {
-
-
-    		}
+    	save.setOnAction(e -> {
+	    	if (!albumField.getText().isBlank()) {
+				al.rename(albumField.getText());
+				if (!userList.getList().get(userIndex).getAlbumList().getList().contains(al)) {
+					userList.getList().get(userIndex).getAlbumList().addAlbum(al);
+					saveData();
+					cancel.fire();
+				} else {
+					errorText.setVisible(true);
+					errorText.setText("Error: Duplicate album");
+				}
+			} else {
+				errorText.setVisible(true);
+				errorText.setText("Error: Album name required");
+			}
     	});
     	
 
@@ -140,7 +163,6 @@ public class SearchResultsController {
     public void saveData() {
 		UserList.writeList(userList);
 		userList = UserList.readList();
-		this.album = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex);
 		//this.tagobsList = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPh
 		obsList = FXCollections.observableArrayList(this.album.getPaths());
 		//obsList.sort((a,b) -> a.compareTo(b));
@@ -157,12 +179,12 @@ public class SearchResultsController {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-			
+
 			dateText.setVisible(true);
 			dateText.setText(ph.getDateTime().getTime().toString());
 			errorText.setVisible(false);
 			
-			tagobsList = FXCollections.observableArrayList(userList.getList().get(userIndex).getAlbumList().getList().get(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).getTagsList());
+			tagobsList = FXCollections.observableArrayList(album.getPhoto(photoListView.getSelectionModel().getSelectedItem()).getTagsList());
 			tagsListView.setItems(tagobsList);
 			
 			if (!ph.getCaption().isBlank()) {

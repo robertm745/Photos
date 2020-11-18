@@ -8,8 +8,8 @@ public class UserList implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private ArrayList<User> users;
 	
-	public static final String storeDir = "src/controller";
-	public static final String storeFile = "list.dat";
+	public static final String storeDir = "data";
+	public static final String storeFile = "data.dat";
 	
 	public UserList() {
 		this.users = new ArrayList<User>();		
