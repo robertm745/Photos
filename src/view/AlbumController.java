@@ -150,10 +150,12 @@ public class AlbumController {
     			if (file != null) {
     				Photo p = new Photo(file.getAbsolutePath(), file.lastModified());
     				album.addPhoto(p);
+    				album.getPhotos().sort((a,b) -> a.compareTo(b));
+    				int index = album.getPhotos().indexOf(p);
     				saveData();
     				//user.getAlbumList().getAlbum(albumIndex).getPhotos().indexOf(p);
     				//photoListView.getSelectionModel().select(p);
-    				int index = obsList.indexOf(p);
+    				//int index = album.getPhotos().indexOf(p);
     				System.out.println(index + " is index");
     				updatePhotoListView(index   /*user.getAlbumList().getAlbum(albumIndex).getPhotos().indexOf(p)photoListView.getSelectionModel().getSelectedIndex()*/);
     			} 
