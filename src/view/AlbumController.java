@@ -197,6 +197,7 @@ public class AlbumController {
     			photoListView.setDisable(false);
     			copyState = false;
     			captionState = false;
+    			tagState = false;
     			albumCB.setVisible(false);     
     			tagCB.setVisible(false);
     			tagtypeField.setVisible(false);
@@ -271,8 +272,11 @@ public class AlbumController {
 	        				if (!copyState) {
 	        					deletePhoto.fire();
 	        				}
+	        				cancel.fire();
+	    				} else {
+	    					errorText.setVisible(true);
+	    					errorText.setText("Error: please select an album");
 	    				}
-	    				cancel.fire();
     			}
     		}
     	});

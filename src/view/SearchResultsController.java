@@ -55,11 +55,11 @@ public class SearchResultsController {
     private int userIndex;
 	
     public void start(Stage newStage, Stage oldStage, Album al, User u, NonAdminController nac, SearchController sc) {
+    	newStage.setTitle("Search Results");
     	userList = UserList.readList();
     	this.userIndex = userList.getUserIndex(u);
     	this.user = userList.getList().get(userIndex);
     	this.album = al;
-		newStage.setTitle("Album View");
 		obsList = FXCollections.observableArrayList(this.album.getPhotos());
 		obsList.sort((a,b) -> a.compareTo(b));
 		photoListView.setItems(obsList);		
@@ -125,6 +125,7 @@ public class SearchResultsController {
     			cancel.setVisible(true);
     			albumField.setVisible(true);
     			photoListView.setDisable(true);
+    			editSearch.setDisable(true);
     			
     		}    			
     	);
@@ -136,6 +137,7 @@ public class SearchResultsController {
 			albumField.setVisible(false);
 			photoListView.setDisable(false);
 			errorText.setVisible(false);
+			editSearch.setDisable(false);
     	});
     	
     	save.setOnAction(e -> {

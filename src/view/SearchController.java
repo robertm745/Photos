@@ -55,6 +55,7 @@ public class SearchController {
 	private int userIndex;
 
 	public void start(Stage newStage, Stage oldStage, User u, NonAdminController nac) {
+    	newStage.setTitle("Search");
 
 		this.userList = UserList.readList();
 		this.userIndex = userList.getUserIndex(u);
