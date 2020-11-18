@@ -28,12 +28,18 @@ public class Photos extends Application {
 	
 	public static void reset() {
 		UserList list = new UserList();
-		User u = new User("user");
+		User u = new User("stock");
 		list.addUser(u);
-		u.getAlbumList().addAlbum(new Album("album"));
-		Photo p = new Photo("src/stock/stock1.jpeg", Calendar.getInstance().getTimeInMillis());
+		u.getAlbumList().addAlbum(new Album("stock"));
+		Photo p = new Photo("data/stock1.jpeg", Calendar.getInstance().getTimeInMillis());
 		u.getAlbumList().getAlbum(0).addPhoto(p);
-		p = new Photo("src/stock/stock2.jpeg", Calendar.getInstance().getTimeInMillis());
+		p = new Photo("data/stock2.jpeg", Calendar.getInstance().getTimeInMillis());
+		u.getAlbumList().getAlbum(0).addPhoto(p);
+		p = new Photo("data/stock3.jpeg", Calendar.getInstance().getTimeInMillis());
+		u.getAlbumList().getAlbum(0).addPhoto(p);
+		p = new Photo("data/stock4.jpeg", Calendar.getInstance().getTimeInMillis());
+		u.getAlbumList().getAlbum(0).addPhoto(p);
+		p = new Photo("data/stock5.jpeg", Calendar.getInstance().getTimeInMillis());
 		u.getAlbumList().getAlbum(0).addPhoto(p);
 		UserList.writeList(list);
 	}
@@ -41,7 +47,7 @@ public class Photos extends Application {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		//reset();
+		reset();
 		
 		launch(args);
 

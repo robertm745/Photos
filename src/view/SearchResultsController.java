@@ -59,6 +59,11 @@ public class SearchResultsController {
     	this.userIndex = userList.getUserIndex(this.user);
 		newStage.setTitle("Album View");
 		obsList = FXCollections.observableArrayList(this.album.getPaths());
+		obsList.sort((a,b) -> {
+			Photo p1 = album.getPhoto(a);
+			Photo p2 = album.getPhoto(b);
+			return p1.compareTo(p2);
+		});
 		photoListView.setItems(obsList);		
 		photoListView.setCellFactory(param -> new ListCell<String>() {
             private ImageView imageView = new ImageView();
@@ -161,9 +166,12 @@ public class SearchResultsController {
     public void saveData() {
 		UserList.writeList(userList);
 		userList = UserList.readList();
-		//this.tagobsList = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPh
 		obsList = FXCollections.observableArrayList(this.album.getPaths());
-		//obsList.sort((a,b) -> a.compareTo(b));
+		obsList.sort((a,b) -> {
+			Photo p1 = album.getPhoto(a);
+			Photo p2 = album.getPhoto(b);
+			return p1.compareTo(p2);
+		});
 		photoListView.setItems(obsList);
 		photoListView.requestFocus();
 		
