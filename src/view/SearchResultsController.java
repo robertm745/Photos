@@ -54,9 +54,10 @@ public class SearchResultsController {
     private ObservableList<String> tagobsList;
     private int userIndex;
 	
-    public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac, SearchController sc) {
+    public void start(Stage newStage, Stage oldStage, Album al, User u, NonAdminController nac, SearchController sc) {
     	userList = UserList.readList();
-    	this.userIndex = userList.getUserIndex(this.user);
+    	this.userIndex = userList.getUserIndex(u);
+    	this.user = userList.getList().get(userIndex);
     	this.album = al;
 		newStage.setTitle("Album View");
 		obsList = FXCollections.observableArrayList(this.album.getPhotos());
@@ -140,8 +141,8 @@ public class SearchResultsController {
     	save.setOnAction(e -> {
 	    	if (!albumField.getText().isBlank()) {
 				al.rename(albumField.getText());
-				if (!userList.getList().get(userIndex).getAlbumList().getList().contains(al)) {
-					userList.getList().get(userIndex).getAlbumList().addAlbum(al);
+				if (!user.getAlbumList().getList().contains(al)) {
+					user.getAlbumList().addAlbum(al);
 					saveData();
 					cancel.fire();
 				} else {
