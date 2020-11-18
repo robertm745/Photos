@@ -32,10 +32,10 @@ public class Photo implements Serializable, Comparable<Photo> {
 		this.caption = caption;
 		this.tags = new HashMap<String, ArrayList<String>>();
 		for (String key : tags.keySet()) {
-		        this.tags.put(key, new ArrayList<String>());
-		        for (String val : tags.get(key)) {
-		                this.tags.get(key).add(val);
-		        }
+	        this.tags.put(key, new ArrayList<String>());
+	        for (String val : tags.get(key)) {
+	                this.tags.get(key).add(val);
+	        }
         }
 	}
 	
