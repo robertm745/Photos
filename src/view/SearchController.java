@@ -21,39 +21,84 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SearchController.
+ * 
+ * @author Mustafa
+ * @author Robert
+ */
 public class SearchController {
 
+	/** The search by date. */
 	@FXML
 	private RadioButton searchByDate;
+	
+	/** The search by tags. */
 	@FXML
 	private RadioButton searchByTags;
+	
+	/** The single radio. */
 	@FXML
 	private RadioButton singleRadio;
+	
+	/** The and radio. */
 	@FXML
 	private RadioButton andRadio;
+	
+	/** The or radio. */
 	@FXML
 	private RadioButton orRadio;
+	
+	/** The tag field two. */
 	@FXML
 	private TextField tagFieldTwo;
+	
+	/** The tag field one. */
 	@FXML
 	private TextField tagFieldOne;
+	
+	/** The search. */
 	@FXML
 	private Button search;
+	
+	/** The back to albums. */
 	@FXML
 	protected Button backToAlbums;
+	
+	/** The logout. */
 	@FXML
 	private Button logout;
+	
+	/** The date pick from. */
 	@FXML
 	private DatePicker datePickFrom;
+	
+	/** The date pick to. */
 	@FXML
 	private DatePicker datePickTo;
+	
+	/** The error text. */
 	@FXML
 	private Text errorText;
 
+	/** The user list. */
 	protected UserList userList;
+	
+	/** The us. */
 	private User us;
+	
+	/** The user index. */
 	private int userIndex;
 
+	/**
+	 * Starts the controller.
+	 *
+	 * @param newStage the new stage
+	 * @param oldStage the old stage
+	 * @param u the user
+	 * @param nac the nonadmincontroller
+	 */
 	public void start(Stage newStage, Stage oldStage, User u, NonAdminController nac) {
 
 		this.userList = UserList.readList();
@@ -243,6 +288,11 @@ public class SearchController {
 
 	}
 
+	/**
+	 * Change state to edit mode.
+	 *
+	 * @param value the value
+	 */
 	public void changeState(boolean value) {
 		tagFieldOne.setVisible(!value);
 		tagFieldTwo.setVisible(!value);

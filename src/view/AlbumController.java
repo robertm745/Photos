@@ -24,46 +24,132 @@ import javafx.stage.Stage;
 
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AlbumController.
+ * 
+ * @author Mustafa
+ * @author Robert
+ */
 public class AlbumController {
 
+    /** The photo list view. */
     @FXML private ListView<Photo> photoListView;
+    
+    /** The tags list view. */
     @FXML private ListView<String> tagsListView;
+    
+    /** The image view. */
     @FXML private ImageView imageView;
+    
+    /** The new caption. */
     @FXML private Button newCaption;
+    
+    /** The new photo. */
     @FXML private Button newPhoto;
+    
+    /** The delete photo. */
     @FXML private Button deletePhoto;
+    
+    /** The next photo. */
     @FXML private Button nextPhoto;
+    
+    /** The prev photo. */
     @FXML private Button prevPhoto;
+    
+    /** The new tag. */
     @FXML private Button newTag;
+    
+    /** The delete tag. */
     @FXML private Button deleteTag;
+    
+    /** The copy photo. */
     @FXML private Button copyPhoto;
+    
+    /** The move photo. */
     @FXML private Button movePhoto;
+    
+    /** The save. */
     @FXML private Button save;
+    
+    /** The cancel. */
     @FXML private Button cancel;
+    
+    /** The back to albums. */
     @FXML private Button backToAlbums;
+    
+    /** The logout. */
     @FXML private Button logout;
+    
+    /** The album name. */
     @FXML private Text albumName;
+    
+    /** The error text. */
     @FXML private Text errorText;
+    
+    /** The caption text. */
     @FXML private Text captionText;
+    
+    /** The date text. */
     @FXML private Text dateText;
+    
+    /** The caption label. */
     @FXML private Text captionLabel;
+    
+    /** The CC mfield. */
     @FXML private TextField CCMfield;
+    
+    /** The tagtype field. */
     @FXML private TextField tagtypeField;
+    
+    /** The tagvalue field. */
     @FXML private TextField tagvalueField;
+    
+    /** The album CB. */
     @FXML private ComboBox<Album> albumCB;
+    
+    /** The tag CB. */
     @FXML private ComboBox<String> tagCB;
     
+    /** The user list. */
     private UserList userList;
+    
+    /** The user. */
     private User user;
+    
+    /** The album. */
     private Album album;
+    
+    /** The obs list. */
     private ObservableList<Photo> obsList;
+    
+    /** The tagobs list. */
     private ObservableList<String> tagobsList;
+    
+    /** The user index. */
     private int userIndex;
+    
+    /** The album index. */
     private int albumIndex;
+    
+    /** The caption state. */
     private boolean captionState;
+    
+    /** The copy state. */
     private boolean copyState;
+    
+    /** The tag state. */
     private boolean tagState;
 	
+    /**
+     * Starts the contorller.
+     *
+     * @param newStage the new stage
+     * @param oldStage the old stage
+     * @param al the album
+     * @param user the user
+     * @param nac the nonadmincontroller
+     */
     public void start(Stage newStage, Stage oldStage, Album al, User user, NonAdminController nac) {
     	userList = UserList.readList();
     	this.album = al;
@@ -392,6 +478,9 @@ public class AlbumController {
           });
     }
     
+    /**
+     * Saves the data.
+     */
     public void saveData() {
 		UserList.writeList(userList);
 		userList = UserList.readList();
@@ -402,6 +491,11 @@ public class AlbumController {
 		photoListView.requestFocus();		
     }
 
+    /**
+     * Update photo list view.
+     *
+     * @param index the index
+     */
     public void updatePhotoListView(int index) {
 		if (index != -1) {
 			photoListView.getSelectionModel().select(index);
@@ -438,6 +532,9 @@ public class AlbumController {
 		photoListView.requestFocus();
     }
     
+    /**
+     * Change state to edit mode.
+     */
     public void changeState() {
 		newTag.setVisible(false);
 		deleteTag.setVisible(false);

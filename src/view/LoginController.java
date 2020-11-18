@@ -15,13 +15,31 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.UserList;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LoginController.
+ * 
+ * @author Mustafa
+ * @author Robert
+ */
 public class LoginController {
 	
+	/** The login button. */
 	@FXML protected Button login;
+	
+	/** The username textfield. */
 	@FXML protected TextField username;
+	
+	/** The status text. */
 	@FXML private Text statusText;
 	
 
+	/**
+	 * Start the controller.
+	 *
+	 * @param primaryStage the primary stage
+	 * @throws Exception the exception
+	 */
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Photos Library");
 		username.clear();

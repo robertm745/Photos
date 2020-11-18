@@ -19,30 +19,82 @@ import javafx.stage.Stage;
 import model.*;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class NonAdminController.
+ * 
+ * @author Mustafa
+ * @author Robert
+ */
 public class NonAdminController {
+	
+	/** The list view. */
 	@FXML private ListView<Album> listView;
+    
+    /** The search. */
     @FXML private Button search;
+    
+    /** The create album. */
     @FXML private Button createAlbum;
+    
+    /** The rename album. */
     @FXML private Button renameAlbum;
+    
+    /** The delete album. */
     @FXML private Button deleteAlbum;
+    
+    /** The open album. */
     @FXML private Button openAlbum;
+    
+    /** The logout button. */
     @FXML private Button logoutButton;
+    
+    /** The cancel. */
     @FXML private Button cancel;
+    
+    /** The save. */
     @FXML private Button save;
+    
+    /** The album text field. */
     @FXML private TextField albumTextField;
+    
+    /** The error text. */
     @FXML private Text errorText;
+    
+    /** The prompt text. */
     @FXML private Text promptText;
+    
+    /** The num pics. */
     @FXML private Text numPics;
+    
+    /** The date range. */
     @FXML private Text dateRange;
     
+    /** The albums. */
     private AlbumList albums;
+    
+    /** The user index. */
     private int userIndex;
+    
+    /** The obs list. */
     private ObservableList<Album> obsList;
+    
+    /** The user list. */
     protected UserList userList;
+    
+    /** The rename. */
     private boolean rename;
+    
+    /** The nac. */
     protected NonAdminController nac;
     
     
+    /**
+     * Starts the controller.
+     *
+     * @param newStage the new stage
+     * @param user the user
+     */
     public void start(Stage newStage, User user) {
     	this.nac = this;
 		newStage.setTitle(user + "'s Albums");
@@ -233,6 +285,9 @@ public class NonAdminController {
     	
     }
     
+    /**
+     * Saves the data.
+     */
     public void saveData() {
 		UserList.writeList(userList);
 		userList = UserList.readList();
@@ -245,6 +300,9 @@ public class NonAdminController {
     }
     
     
+    /**
+     * Update list view.
+     */
     public void updateListView() {
     	Album a = listView.getSelectionModel().getSelectedItem();
     	if (a != null ) {
