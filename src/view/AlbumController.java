@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 public class AlbumController {
 
-    @FXML private ListView<String> photoListView;
+    @FXML private ListView<Photo> photoListView;
     @FXML private ListView<String> tagsListView;
     @FXML private ImageView imageView;
     @FXML private Button newCaption;
@@ -56,7 +56,7 @@ public class AlbumController {
     private UserList userList;
     private User user;
     private Album album;
-    private ObservableList<String> obsList;
+    private ObservableList<Photo> obsList;
     private ObservableList<String> tagobsList;
     private int userIndex;
     private int albumIndex;
@@ -70,22 +70,19 @@ public class AlbumController {
     	this.user = user;
     	this.userIndex = userList.getUserIndex(this.user);
     	this.albumIndex = userList.getList().get(this.userIndex).getAlbumList().getAlbumIndex(this.album);
+    	saveData();
+
     	albumName.setText(album.toString());
 		newStage.setTitle("Album View");
-		obsList = FXCollections.observableArrayList(this.album.getPaths());
-		obsList.sort((a,b) -> {
-			Photo p1 = album.getPhoto(a);
-			Photo p2 = album.getPhoto(b);
-			return p1.compareTo(p2);
-		});
+		obsList = FXCollections.observableArrayList(this.album.getPhotos());
+		obsList.sort((a,b) -> a.compareTo(b));
 		photoListView.setItems(obsList);		
-		photoListView.setCellFactory(param -> new ListCell<String>() {
+		photoListView.setCellFactory(param -> new ListCell<Photo>() {
             private ImageView imageView = new ImageView();
             @Override
-            public void updateItem(String path, boolean empty) {    
-                super.updateItem(path, empty);
-        		Photo p = album.getPhoto(path);
-                if (empty) {
+            public void updateItem(Photo p, boolean empty) {    
+                super.updateItem(p, empty);
+                if (empty || p == null) {
                     setText(null);
                     setGraphic(null);
                 } else {
@@ -100,10 +97,10 @@ public class AlbumController {
             }
         });
 		
-    	photoListView.getSelectionModel().select(0);
-    	updatePhotoListView();
+		photoListView.getSelectionModel().select(0);
+    	updatePhotoListView(photoListView.getSelectionModel().getSelectedIndex());
     	
-		photoListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> updatePhotoListView());
+		photoListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> updatePhotoListView(photoListView.getSelectionModel().getSelectedIndex()));
     	
     	backToAlbums.setOnAction(e -> {
     		newStage.close(); 
@@ -133,13 +130,12 @@ public class AlbumController {
     		public void handle(ActionEvent e) {
     			int index = photoListView.getSelectionModel().getSelectedIndex();
     			if (index != -1) {
-    				Photo p = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem());
+    				Photo p = photoListView.getSelectionModel().getSelectedItem();
         			userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).deletePhoto(p);
         			saveData();
         			if (index == album.getPhotos().size())
         				index--;
-        			photoListView.getSelectionModel().select(index);
-        			updatePhotoListView();
+        			updatePhotoListView(index);
     			}
     		}
     	});
@@ -153,10 +149,10 @@ public class AlbumController {
      			File file = fileChooser.showOpenDialog(new Stage());
     			if (file != null) {
     				Photo p = new Photo(file.getAbsolutePath(), file.lastModified());
-    				userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).addPhoto(p);
+    				album.addPhoto(p);
     				saveData();
-    				photoListView.getSelectionModel().select(p.toString());
-    				updatePhotoListView();
+    				photoListView.getSelectionModel().select(p);
+    				updatePhotoListView(photoListView.getSelectionModel().getSelectedIndex());
     			} 
     		}
     	});
@@ -168,7 +164,7 @@ public class AlbumController {
 				copyPhoto.setVisible(false);
 				movePhoto.setVisible(false);
     			newCaption.setDisable(true);
-    			Photo p = album.getPhoto(photoListView.getSelectionModel().getSelectedItem());
+    			Photo p = photoListView.getSelectionModel().getSelectedItem();
     			if (p.getCaption() != null)
     				CCMfield.setText(p.getCaption());
     			CCMfield.requestFocus();
@@ -219,13 +215,15 @@ public class AlbumController {
         				errorText.setVisible(true);
         				errorText.setText("Error: Caption more than 30 chars");    				
         			} else {
-    	    			userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).setCaption(s);
+        				photoListView.getSelectionModel().getSelectedItem().setCaption(s);
+        				int index = photoListView.getSelectionModel().getSelectedIndex();
     	    			saveData();
     	    			cancel.fire();
-    	    			updatePhotoListView();
+    	    			updatePhotoListView(index);
     	    			photoListView.setDisable(false);
         			}
     			} else if (tagState) {
+					int index = photoListView.getSelectionModel().getSelectedIndex();
     				if (tagCB.getSelectionModel().getSelectedItem().equals("Create new tag")) {
     					if(tagtypeField.getText().strip().isEmpty() || tagvalueField.getText().strip().isEmpty()) {
     						errorText.setVisible(true);
@@ -234,10 +232,10 @@ public class AlbumController {
 							if (!user.getTags().contains(tagtypeField.getText())) {
 							      user.addTag(tagtypeField.getText());
 							}
-    						userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).addTag(tagtypeField.getText(), tagvalueField.getText());
+    						photoListView.getSelectionModel().getSelectedItem().addTag(tagtypeField.getText(), tagvalueField.getText());
         					saveData();
         	    			cancel.fire();
-        	    			updatePhotoListView();
+        	    			updatePhotoListView(index);
         	    			photoListView.setDisable(false);
         	    			tagState = false;
     					}			
@@ -247,10 +245,10 @@ public class AlbumController {
     						errorText.setVisible(true);
             				errorText.setText("Error: please enter tag value");
     					} else {
-    						userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
+    						photoListView.getSelectionModel().getSelectedItem().addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
         					saveData();
         	    			cancel.fire();
-        	    			updatePhotoListView();
+        	    			updatePhotoListView(index);
         	    			photoListView.setDisable(false);
         	    			tagState = false;
     					}
@@ -260,9 +258,8 @@ public class AlbumController {
     				else {    			
 	    				if (albumCB.getSelectionModel().getSelectedIndex() != -1) {
 	    					Album a = albumCB.getSelectionModel().getSelectedItem();
-	    					int index = userList.getList().get(userIndex).getAlbumList().getAlbumIndex(a);
-	    					Photo p = userList.getList().get(userIndex).getAlbumList().getList().get(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem());
-	    					userList.getList().get(userIndex).getAlbumList().getAlbum(index).addPhoto(new Photo(p.toString(), p.getDateTime().getTimeInMillis(), p.getCaption(), p.getTags()));
+	    					Photo p = photoListView.getSelectionModel().getSelectedItem();
+	    					a.addPhoto(new Photo(p.toString(), p.getDateTime().getTimeInMillis(), p.getCaption(), p.getTags()));
 	        				if (!copyState) {
 	        					deletePhoto.fire();
 	        				}
@@ -360,13 +357,14 @@ public class AlbumController {
     		public void handle(ActionEvent e) {
     			int index = tagsListView.getSelectionModel().getSelectedIndex();
     			if (index != -1) {
-    				Photo p = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem());
+    				Photo p = photoListView.getSelectionModel().getSelectedItem();
+    				int index2 = photoListView.getSelectionModel().getSelectedIndex();
         			p.removeTag(tagsListView.getSelectionModel().getSelectedItem());
         			saveData();
         			if (index == p.getTagsList().size())
         				index--;
         			tagsListView.getSelectionModel().select(index);
-        			updatePhotoListView();
+        			updatePhotoListView(index2);
     			}
     		}
     	});
@@ -389,19 +387,16 @@ public class AlbumController {
 		UserList.writeList(userList);
 		userList = UserList.readList();
 		this.album = userList.getList().get(userIndex).getAlbumList().getAlbum(albumIndex);
-		obsList = FXCollections.observableArrayList(this.album.getPaths());
-		obsList.sort((a,b) -> {
-			Photo p1 = album.getPhoto(a);
-			Photo p2 = album.getPhoto(b);
-			return p1.compareTo(p2);
-		});
+		obsList = FXCollections.observableArrayList(this.album.getPhotos());
+		obsList.sort((a,b) -> a.compareTo(b));
 		photoListView.setItems(obsList);
 		photoListView.requestFocus();		
     }
 
-    public void updatePhotoListView() {
-		if (photoListView.getSelectionModel().getSelectedIndex() != -1) {
-			Photo ph = album.getPhoto(photoListView.getSelectionModel().getSelectedItem());
+    public void updatePhotoListView(int index) {
+		if (index != -1) {
+			photoListView.getSelectionModel().select(index);
+			Photo ph = photoListView.getSelectionModel().getSelectedItem();
 			try {
 				imageView.setImage(new Image(new FileInputStream(ph.toString())));
 			} catch (FileNotFoundException e) {
@@ -412,7 +407,7 @@ public class AlbumController {
 			dateText.setText(ph.getDateTime().getTime().toString());
 			errorText.setVisible(false);
 			
-			tagobsList = FXCollections.observableArrayList(userList.getList().get(userIndex).getAlbumList().getList().get(albumIndex).getPhoto(photoListView.getSelectionModel().getSelectedItem()).getTagsList());
+			tagobsList = FXCollections.observableArrayList(ph.getTagsList());
 			tagsListView.setItems(tagobsList);
 			
 			if (!ph.getCaption().isBlank()) {
@@ -426,6 +421,7 @@ public class AlbumController {
 			}					
 		} 
 		else {
+			System.out.println(index + " is index");
 			imageView.setImage(null);
 			captionLabel.setVisible(false);
 			captionText.setVisible(false);

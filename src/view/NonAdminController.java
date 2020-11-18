@@ -155,7 +155,7 @@ public class NonAdminController {
     			else if (!albumTextField.getText().isBlank()) {
     				Album a = new Album(albumTextField.getText());
     				if (!albums.getList().contains(a)) {
-    					userList.getList().get(userIndex).getAlbumList().addAlbum(a);
+    					albums.addAlbum(a);
     					saveData();
     					listView.getSelectionModel().select(a);
     					cancel.fire();

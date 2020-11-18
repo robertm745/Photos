@@ -95,7 +95,7 @@ public class Photo implements Serializable, Comparable<Photo> {
 		if (o == null || !(o instanceof Photo))
 			return false;
 		Photo p = (Photo) o;
-		return p.toString().equalsIgnoreCase(this.toString());
+		return p.toString().equalsIgnoreCase(this.toString()) && this.getCaption().equalsIgnoreCase(p.getCaption());
 	}
 	
 	@Override
