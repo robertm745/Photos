@@ -15,25 +15,44 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author robert
+ * The Class AdminController.
  *
+ * @author Robert
+ * @author Mustafa
  */
 public class AdminController {
 
+    /** The list view. */
     @FXML private ListView<User> listView;
+    
+    /** The new user button. */
     @FXML private Button newUserButton;
+    
+    /** The delete user button. */
     @FXML private Button deleteUserButton;
+    
+    /** The logout button. */
     @FXML private Button logoutButton;
+    
+    /** The new user text field. */
     @FXML private TextField newUserTextField;
+    
+    /** The status text. */
     @FXML private Text statusText;
     
+    /** The obs list. */
     private ObservableList<User> obsList;
+    
+    /** The list. */
     private UserList list;
 
     /**
-     * @param newStage
-     * @throws Exception
+     * Starts the controller
+     *
+     * @param newStage the new stage
+     * @throws Exception the exception
      */
     public void start(Stage newStage) throws Exception {
 		newStage.setTitle("Admin");
@@ -102,6 +121,9 @@ public class AdminController {
     	
     }
     
+    /**
+     * Saves the data.
+     */
     public void saveData() {
 		UserList.writeList(list);
 		list = UserList.readList();

@@ -10,8 +10,23 @@ import javafx.scene.layout.Pane;
 import view.*;
 import model.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Photos containing main.
+ */
+/**
+ * @author Robert
+ * @author Mustafa
+ *
+ */
 public class Photos extends Application {
 	
+	/**
+	 * Start.
+	 *
+	 * @param primaryStage the primary stage
+	 * @throws Exception the exception
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
@@ -26,6 +41,9 @@ public class Photos extends Application {
 		primaryStage.show();
 	}
 	
+	/**
+	 * Reset. resets application which stock photos
+	 */
 	public static void reset() {
 		UserList list = new UserList();
 		User u = new User("stock");
@@ -44,6 +62,11 @@ public class Photos extends Application {
 		UserList.writeList(list);
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		

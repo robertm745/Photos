@@ -27,33 +27,88 @@ import model.Photo;
 import model.User;
 import model.UserList;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SearchResultsController.
+ * 
+ * @author Mustafa
+ * @author Robert
+ */
 public class SearchResultsController {
 
 
 
+    /** The photo list view. */
     @FXML private ListView<Photo> photoListView;
+    
+    /** The tags list view. */
     @FXML private ListView<String> tagsListView;
+    
+    /** The image view. */
     @FXML private ImageView imageView;
+    
+    /** The save. */
     @FXML private Button save;
+    
+    /** The cancel. */
     @FXML private Button cancel;
+    
+    /** The back to albums. */
     @FXML private Button backToAlbums;
+    
+    /** The logout. */
     @FXML private Button logout;
+    
+    /** The new album. */
     @FXML private Button newAlbum;
+    
+    /** The edit search. */
     @FXML private Button editSearch;
+    
+    /** The error text. */
     @FXML private Text errorText;
+    
+    /** The caption text. */
     @FXML private Text captionText;
+    
+    /** The date text. */
     @FXML private Text dateText;
+    
+    /** The caption label. */
     @FXML private Text captionLabel;
+    
+    /** The album field. */
     @FXML private TextField albumField;
     
     
+    /** The user list. */
     private UserList userList;
+    
+    /** The user. */
     private User user;
+    
+    /** The album. */
     private Album album;
+    
+    /** The obs list. */
     private ObservableList<Photo> obsList;
+    
+    /** The tagobs list. */
     private ObservableList<String> tagobsList;
+    
+    /** The user index. */
     private int userIndex;
 	
+    /**
+     * Starts the controller.
+     *
+     * @param newStage the new stage
+     * @param oldStage the old stage
+     * @param al the album
+     * @param u the user
+     * @param nac the nonadmincontroller
+     * @param sc the searchcontroller
+     */
     public void start(Stage newStage, Stage oldStage, Album al, User u, NonAdminController nac, SearchController sc) {
     	newStage.setTitle("Search Results");
     	userList = UserList.readList();
@@ -162,6 +217,9 @@ public class SearchResultsController {
 
     }
     
+    /**
+     * Save the data.
+     */
     public void saveData() {
 		UserList.writeList(userList);
 		userList = UserList.readList();
@@ -172,6 +230,9 @@ public class SearchResultsController {
 		
     }
 
+    /**
+     * Updates photo list view.
+     */
     public void updatePhotoListView() {
 		if (photoListView.getSelectionModel().getSelectedIndex() != -1) {
 			Photo ph = photoListView.getSelectionModel().getSelectedItem();
@@ -207,6 +268,9 @@ public class SearchResultsController {
 		photoListView.requestFocus();
     }
     
+    /**
+     * Change state to edit mode.
+     */
     public void changeState() {
 		photoListView.setDisable(true);
 		save.setVisible(true);
