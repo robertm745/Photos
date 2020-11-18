@@ -340,7 +340,7 @@ public class AlbumController {
     			
     			tagCB.getSelectionModel().clearSelection();
     			//tagCB.getItems().clear();
-
+    			save.setText("Add");
     			tagCB.setPromptText("Select tag type");
     			
     			ObservableList<String> list = FXCollections.observableArrayList();
