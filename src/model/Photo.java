@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class Photo implements Serializable {
+public class Photo implements Serializable, Comparable<Photo> {
 	
 	private static final long serialVersionUID = 1L;
 	private String caption;
@@ -23,17 +23,6 @@ public class Photo implements Serializable {
 		this.caption = "";
 		this.tags = new HashMap<String, ArrayList<String>>();
 	}
-	
-	/*
-	public Photo(String path, long datetime, String caption) {
-		this.path = path;
-		this.datetime = Calendar.getInstance();
-		this.datetime.setTimeInMillis(datetime);
-		this.datetime.set(Calendar.MILLISECOND, 0);
-		this.caption = caption;
-		this.tags = new HashMap<String, ArrayList<String>>();
-	}
-	*/
 	
 	public Photo(String path, long datetime, String caption, HashMap<String, ArrayList<String>> tags ) {
 		this.path = path;
@@ -107,6 +96,13 @@ public class Photo implements Serializable {
 			return false;
 		Photo p = (Photo) o;
 		return p.toString().equalsIgnoreCase(this.toString());
+	}
+	
+	@Override
+	public int compareTo(Photo p) {
+		if (this.getDateTime().getTime().equals(p.getDateTime().getTime())) 
+			return 0;
+		return this.getDateTime().getTime().before(p.getDateTime().getTime()) ? 1 : -1;
 	}
 
 }

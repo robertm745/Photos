@@ -42,7 +42,7 @@ public class Album implements Serializable {
 	
 	public Photo getPhoto(String path) {
 		for (Photo p : photos) {
-			if (p.toString().equalsIgnoreCase(path))
+			if (p.toString().equals(path))
 				return p;
 		}
 		return null;
