@@ -30,7 +30,15 @@ public class Photo implements Serializable, Comparable<Photo> {
 		this.datetime.setTimeInMillis(datetime);
 		this.datetime.set(Calendar.MILLISECOND, 0);
 		this.caption = caption;
-		this.tags = tags;
+		
+		this.tags = new HashMap<String, ArrayList<String>>();
+		
+		for (String key : tags.keySet()) {
+			this.tags.put(key, new ArrayList<String>());
+			for (String val : tags.get(key)) {
+				this.tags.get(key).add(val);
+			}
+		}
 	}
 	
 	public void setCaption (String value) {

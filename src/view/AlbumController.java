@@ -343,8 +343,8 @@ public class AlbumController {
     			
     			tagCB.getSelectionModel().clearSelection();
     			//tagCB.getItems().clear();
-
     			tagCB.setPromptText("Select tag type");
+    			save.setText("Add");
     			
     			ObservableList<String> list = FXCollections.observableArrayList();
     			list.add("Create new tag");
@@ -382,7 +382,6 @@ public class AlbumController {
       			}
   			}
           });
-    	
     }
     
     public void saveData() {
