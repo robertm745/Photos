@@ -327,12 +327,17 @@ public class AlbumController {
 								if (!user.getTags().contains(tagtypeField.getText())) {
 								      user.addTag(tagtypeField.getText());
 								}
-	    						photoListView.getSelectionModel().getSelectedItem().addTag(tagtypeField.getText(), tagvalueField.getText());
-	        					saveData();
-	        	    			cancel.fire();
-	        	    			updatePhotoListView(index);
-	        	    			photoListView.setDisable(false);
-	        	    			tagState = false;
+								if (photoListView.getSelectionModel().getSelectedItem().getTagsList().contains(tagtypeField.getText()+"|"+tagvalueField.getText())) {
+									errorText.setVisible(true);
+		            				errorText.setText("Error: duplicate");
+								} else {
+		    						photoListView.getSelectionModel().getSelectedItem().addTag(tagtypeField.getText(), tagvalueField.getText());
+		        					saveData();
+		        	    			cancel.fire();
+		        	    			updatePhotoListView(index);
+		        	    			photoListView.setDisable(false);
+		        	    			tagState = false;
+								}
 	    					}			
 	    					    					
 	    				} else {    	
@@ -340,12 +345,17 @@ public class AlbumController {
 	    						errorText.setVisible(true);
 	            				errorText.setText("Error: please enter tag value");
 	    					} else {
-	    						photoListView.getSelectionModel().getSelectedItem().addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
-	        					saveData();
-	        	    			cancel.fire();
-	        	    			updatePhotoListView(index);
-	        	    			photoListView.setDisable(false);
-	        	    			tagState = false;
+	    						if (photoListView.getSelectionModel().getSelectedItem().getTagsList().contains(tagCB.getSelectionModel().getSelectedItem()+"|"+tagvalueField.getText())) {
+	    							errorText.setVisible(true);
+		            				errorText.setText("Error: duplicate");
+	    						} else {
+		    						photoListView.getSelectionModel().getSelectedItem().addTag(tagCB.getSelectionModel().getSelectedItem(), tagvalueField.getText());
+		        					saveData();
+		        	    			cancel.fire();
+		        	    			updatePhotoListView(index);
+		        	    			photoListView.setDisable(false);
+		        	    			tagState = false;
+	    						}
 	    					}	    					
 	    				}
 					}
