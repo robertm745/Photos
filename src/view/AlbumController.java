@@ -324,7 +324,7 @@ public class AlbumController {
 	    						errorText.setVisible(true);
 	            				errorText.setText("Error: please enter tag type and value");
 	    					} else {
-								if (!user.getTags().contains(tagtypeField.getText())) {
+								if (!userList.getList().get(userIndex).getTags().contains(tagtypeField.getText())) {
 									userList.getList().get(userIndex).addTag(tagtypeField.getText());
 								}
 								if (photoListView.getSelectionModel().getSelectedItem().getTagsList().contains(tagtypeField.getText()+"|"+tagvalueField.getText())) {
