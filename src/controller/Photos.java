@@ -70,7 +70,7 @@ public class Photos extends Application {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		reset();
+		//reset();
 		
 		launch(args);
 
