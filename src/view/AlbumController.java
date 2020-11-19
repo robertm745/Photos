@@ -325,7 +325,7 @@ public class AlbumController {
 	            				errorText.setText("Error: please enter tag type and value");
 	    					} else {
 								if (!user.getTags().contains(tagtypeField.getText())) {
-								      user.addTag(tagtypeField.getText());
+									userList.getList().get(userIndex).addTag(tagtypeField.getText());
 								}
 								if (photoListView.getSelectionModel().getSelectedItem().getTagsList().contains(tagtypeField.getText()+"|"+tagvalueField.getText())) {
 									errorText.setVisible(true);
@@ -454,7 +454,7 @@ public class AlbumController {
         			
         			ObservableList<String> list = FXCollections.observableArrayList();
         			list.add("Create new tag");
-        			list.addAll(user.getTags());
+        			list.addAll(userList.getList().get(userIndex).getTags());
         			
         			tagCB.setItems(list);
     			}
